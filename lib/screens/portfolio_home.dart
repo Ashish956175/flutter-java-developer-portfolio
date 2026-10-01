@@ -3,6 +3,11 @@ import '../sections/hero_section.dart';
 import '../widgets/responsive_layout.dart';
 import '../sections/about_section.dart';
 import '../sections/skills_section.dart';
+import '../sections/experience_section.dart';
+import '../sections/projects_section.dart';
+import '../sections/certifications_section.dart';
+import '../sections/education_section.dart';
+import '../sections/contact_section.dart';
 
 class PortfolioHome extends StatelessWidget {
   final VoidCallback onThemeChanged;
@@ -48,10 +53,13 @@ class _DesktopHome extends StatelessWidget {
           ),
 
           const HeroSection(),
-
           const AboutSection(),
-
           const SkillsSection(),
+          const ExperienceSection(),
+          const ProjectsSection(),
+          const CertificationsSection(),
+          const EducationSection(),
+          const ContactSection(),
         ],
       ),
     );
@@ -76,10 +84,13 @@ class _MobileHome extends StatelessWidget {
           ),
 
           const HeroSection(),
-
           const AboutSection(),
-
           const SkillsSection(),
+          const ExperienceSection(),
+          const ProjectsSection(),
+          const CertificationsSection(),
+          const EducationSection(),
+          const ContactSection(),
         ],
       ),
     );
