@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import '../sections/hero_section.dart';
-import '../widgets/responsive_layout.dart';
-import '../sections/about_section.dart';
-import '../sections/skills_section.dart';
-import '../sections/experience_section.dart';
-import '../sections/projects_section.dart';
-import '../sections/certifications_section.dart';
-import '../sections/education_section.dart';
-import '../sections/contact_section.dart';
 
-class PortfolioHome extends StatelessWidget {
+import '../sections/about_section.dart';
+import '../sections/certifications_section.dart';
+import '../sections/contact_section.dart';
+import '../sections/education_section.dart';
+import '../sections/experience_section.dart';
+import '../sections/hero_section.dart';
+import '../sections/projects_section.dart';
+import '../sections/skills_section.dart';
+import '../widgets/responsive_layout.dart';
+
+class PortfolioHome extends StatefulWidget {
   final VoidCallback onThemeChanged;
 
   const PortfolioHome({
@@ -18,94 +19,303 @@ class PortfolioHome extends StatelessWidget {
   });
 
   @override
+  State<PortfolioHome> createState() => _PortfolioHomeState();
+}
+
+class _PortfolioHomeState extends State<PortfolioHome> {
+  final ScrollController _scrollController = ScrollController();
+
+  final GlobalKey homeKey = GlobalKey();
+  final GlobalKey aboutKey = GlobalKey();
+  final GlobalKey skillsKey = GlobalKey();
+  final GlobalKey experienceKey = GlobalKey();
+  final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey contactKey = GlobalKey();
+
+  void scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeInOut,
+        alignment: 0.05,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ResponsiveLayout(
-        mobile: _MobileHome(
-          onThemeChanged: onThemeChanged,
-        ),
-        tablet: _DesktopHome(
-          onThemeChanged: onThemeChanged,
-        ),
-        desktop: _DesktopHome(
-          onThemeChanged: onThemeChanged,
-        ),
+    return ResponsiveLayout(
+      mobile: _MobileHome(
+        scrollController: _scrollController,
+        homeKey: homeKey,
+        aboutKey: aboutKey,
+        skillsKey: skillsKey,
+        experienceKey: experienceKey,
+        projectsKey: projectsKey,
+        contactKey: contactKey,
+        scrollToSection: scrollToSection,
+        onThemeChanged: widget.onThemeChanged,
+      ),
+      tablet: _DesktopHome(
+        scrollController: _scrollController,
+        homeKey: homeKey,
+        aboutKey: aboutKey,
+        skillsKey: skillsKey,
+        experienceKey: experienceKey,
+        projectsKey: projectsKey,
+        contactKey: contactKey,
+        scrollToSection: scrollToSection,
+        onThemeChanged: widget.onThemeChanged,
+      ),
+      desktop: _DesktopHome(
+        scrollController: _scrollController,
+        homeKey: homeKey,
+        aboutKey: aboutKey,
+        skillsKey: skillsKey,
+        experienceKey: experienceKey,
+        projectsKey: projectsKey,
+        contactKey: contactKey,
+        scrollToSection: scrollToSection,
+        onThemeChanged: widget.onThemeChanged,
       ),
     );
   }
 }
 
-//destop
+// =====================================================
+// DESKTOP HOME
+// =====================================================
+
 class _DesktopHome extends StatelessWidget {
+  final ScrollController scrollController;
+
   final VoidCallback onThemeChanged;
+
+  final GlobalKey homeKey;
+  final GlobalKey aboutKey;
+  final GlobalKey skillsKey;
+  final GlobalKey experienceKey;
+  final GlobalKey projectsKey;
+  final GlobalKey contactKey;
+
+  final Function(GlobalKey) scrollToSection;
 
   const _DesktopHome({
+    required this.scrollController,
     required this.onThemeChanged,
+    required this.homeKey,
+    required this.aboutKey,
+    required this.skillsKey,
+    required this.experienceKey,
+    required this.projectsKey,
+    required this.contactKey,
+    required this.scrollToSection,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _DesktopNavbar(
-            onThemeChanged: onThemeChanged,
-          ),
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SingleChildScrollView(
+        controller: scrollController,
+        child: Column(
+          children: [
+            _DesktopNavbar(
+              onThemeChanged: onThemeChanged,
+              scrollToSection: scrollToSection,
+              homeKey: homeKey,
+              aboutKey: aboutKey,
+              skillsKey: skillsKey,
+              experienceKey: experienceKey,
+              projectsKey: projectsKey,
+              contactKey: contactKey,
+            ),
 
-          const HeroSection(),
-          const AboutSection(),
-          const SkillsSection(),
-          const ExperienceSection(),
-          const ProjectsSection(),
-          const CertificationsSection(),
-          const EducationSection(),
-          const ContactSection(),
-        ],
+            // Hero
+            Container(
+              key: homeKey,
+              child: const HeroSection(),
+            ),
+
+            // About
+            Container(
+              key: aboutKey,
+              child: const AboutSection(),
+            ),
+
+            // Skills
+            Container(
+              key: skillsKey,
+              child: const SkillsSection(),
+            ),
+
+            // Experience
+            Container(
+              key: experienceKey,
+              child: const ExperienceSection(),
+            ),
+
+            // Projects
+            Container(
+              key: projectsKey,
+              child: const ProjectsSection(),
+            ),
+
+            // Certifications
+            const CertificationsSection(),
+
+            // Education
+            const EducationSection(),
+
+            // Contact
+            Container(
+              key: contactKey,
+              child: const ContactSection(),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-//mobile
+// =====================================================
+// MOBILE HOME
+// =====================================================
+
 class _MobileHome extends StatelessWidget {
+  final ScrollController scrollController;
+
   final VoidCallback onThemeChanged;
 
+  final GlobalKey homeKey;
+  final GlobalKey aboutKey;
+  final GlobalKey skillsKey;
+  final GlobalKey experienceKey;
+  final GlobalKey projectsKey;
+  final GlobalKey contactKey;
+
+  final Function(GlobalKey) scrollToSection;
+
   const _MobileHome({
+    required this.scrollController,
     required this.onThemeChanged,
+    required this.homeKey,
+    required this.aboutKey,
+    required this.skillsKey,
+    required this.experienceKey,
+    required this.projectsKey,
+    required this.contactKey,
+    required this.scrollToSection,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _MobileNavbar(
-            onThemeChanged: onThemeChanged,
-          ),
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SingleChildScrollView(
+        controller: scrollController,
+        child: Column(
+          children: [
+            _MobileNavbar(
+              onThemeChanged: onThemeChanged,
+              scrollToSection: scrollToSection,
+              homeKey: homeKey,
+              aboutKey: aboutKey,
+              skillsKey: skillsKey,
+              experienceKey: experienceKey,
+              projectsKey: projectsKey,
+              contactKey: contactKey,
+            ),
 
-          const HeroSection(),
-          const AboutSection(),
-          const SkillsSection(),
-          const ExperienceSection(),
-          const ProjectsSection(),
-          const CertificationsSection(),
-          const EducationSection(),
-          const ContactSection(),
-        ],
+            // Hero
+            Container(
+              key: homeKey,
+              child: const HeroSection(),
+            ),
+
+            // About
+            Container(
+              key: aboutKey,
+              child: const AboutSection(),
+            ),
+
+            // Skills
+            Container(
+              key: skillsKey,
+              child: const SkillsSection(),
+            ),
+
+            // Experience
+            Container(
+              key: experienceKey,
+              child: const ExperienceSection(),
+            ),
+
+            // Projects
+            Container(
+              key: projectsKey,
+              child: const ProjectsSection(),
+            ),
+
+            // Certifications
+            const CertificationsSection(),
+
+            // Education
+            const EducationSection(),
+
+            // Contact
+            Container(
+              key: contactKey,
+              child: const ContactSection(),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-//destopNavebar
+
+// =====================================================
+// DESKTOP NAVBAR
+// =====================================================
+
 class _DesktopNavbar extends StatelessWidget {
   final VoidCallback onThemeChanged;
 
+  final GlobalKey homeKey;
+  final GlobalKey aboutKey;
+  final GlobalKey skillsKey;
+  final GlobalKey experienceKey;
+  final GlobalKey projectsKey;
+  final GlobalKey contactKey;
+
+  final Function(GlobalKey) scrollToSection;
+
   const _DesktopNavbar({
     required this.onThemeChanged,
+    required this.homeKey,
+    required this.aboutKey,
+    required this.skillsKey,
+    required this.experienceKey,
+    required this.projectsKey,
+    required this.contactKey,
+    required this.scrollToSection,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 70,
@@ -118,27 +328,47 @@ class _DesktopNavbar extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary,
+              color: theme.colorScheme.primary,
             ),
           ),
 
           const Spacer(),
 
-          _navItem('Home'),
-          _navItem('About'),
-          _navItem('Skills'),
-          _navItem('Projects'),
-          _navItem('Experience'),
-          _navItem('Contact'),
+          _navItem(
+            'Home',
+            homeKey,
+          ),
+
+          _navItem(
+            'About',
+            aboutKey,
+          ),
+
+          _navItem(
+            'Skills',
+            skillsKey,
+          ),
+
+          _navItem(
+            'Projects',
+            projectsKey,
+          ),
+
+          _navItem(
+            'Experience',
+            experienceKey,
+          ),
+
+          _navItem(
+            'Contact',
+            contactKey,
+          ),
 
           IconButton(
             tooltip: 'Change theme',
             onPressed: onThemeChanged,
             icon: Icon(
-              Theme.of(context).brightness ==
-                  Brightness.dark
+              theme.brightness == Brightness.dark
                   ? Icons.light_mode
                   : Icons.dark_mode,
             ),
@@ -147,7 +377,9 @@ class _DesktopNavbar extends StatelessWidget {
           const SizedBox(width: 8),
 
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Resume download will be added later.
+            },
             child: const Text('Resume'),
           ),
         ],
@@ -155,24 +387,50 @@ class _DesktopNavbar extends StatelessWidget {
     );
   }
 
-  Widget _navItem(String title) {
+  Widget _navItem(
+      String title,
+      GlobalKey sectionKey,
+      ) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        scrollToSection(sectionKey);
+      },
       child: Text(title),
     );
   }
 }
 
-//mobileNavbar
+// =====================================================
+// MOBILE NAVBAR
+// =====================================================
+
 class _MobileNavbar extends StatelessWidget {
   final VoidCallback onThemeChanged;
 
+  final GlobalKey homeKey;
+  final GlobalKey aboutKey;
+  final GlobalKey skillsKey;
+  final GlobalKey experienceKey;
+  final GlobalKey projectsKey;
+  final GlobalKey contactKey;
+
+  final Function(GlobalKey) scrollToSection;
+
   const _MobileNavbar({
     required this.onThemeChanged,
+    required this.homeKey,
+    required this.aboutKey,
+    required this.skillsKey,
+    required this.experienceKey,
+    required this.projectsKey,
+    required this.contactKey,
+    required this.scrollToSection,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -185,9 +443,7 @@ class _MobileNavbar extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary,
+              color: theme.colorScheme.primary,
             ),
           ),
 
@@ -197,8 +453,7 @@ class _MobileNavbar extends StatelessWidget {
             tooltip: 'Change theme',
             onPressed: onThemeChanged,
             icon: Icon(
-              Theme.of(context).brightness ==
-                  Brightness.dark
+              theme.brightness == Brightness.dark
                   ? Icons.light_mode
                   : Icons.dark_mode,
             ),
@@ -206,11 +461,95 @@ class _MobileNavbar extends StatelessWidget {
 
           IconButton(
             tooltip: 'Menu',
-            onPressed: () {},
+            onPressed: () {
+              _showMobileMenu(context);
+            },
             icon: const Icon(Icons.menu),
           ),
         ],
       ),
+    );
+  }
+
+  void _showMobileMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _menuItem(
+                  context,
+                  'Home',
+                  Icons.home_outlined,
+                  homeKey,
+                ),
+
+                _menuItem(
+                  context,
+                  'About',
+                  Icons.person_outline,
+                  aboutKey,
+                ),
+
+                _menuItem(
+                  context,
+                  'Skills',
+                  Icons.code_outlined,
+                  skillsKey,
+                ),
+
+                _menuItem(
+                  context,
+                  'Experience',
+                  Icons.work_outline,
+                  experienceKey,
+                ),
+
+                _menuItem(
+                  context,
+                  'Projects',
+                  Icons.folder_outlined,
+                  projectsKey,
+                ),
+
+                _menuItem(
+                  context,
+                  'Contact',
+                  Icons.email_outlined,
+                  contactKey,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _menuItem(
+      BuildContext context,
+      String title,
+      IconData icon,
+      GlobalKey sectionKey,
+      ) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      onTap: () {
+        Navigator.pop(context);
+
+        Future.delayed(
+          const Duration(milliseconds: 150),
+              () {
+            scrollToSection(sectionKey);
+          },
+        );
+      },
     );
   }
 }
