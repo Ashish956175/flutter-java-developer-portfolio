@@ -10,30 +10,60 @@ class ProjectsSection extends StatelessWidget {
     final projects = [
       {
         'title': 'Note Editor',
+        'category': 'Flutter Application',
         'description':
-        'A Flutter note-taking application with local database storage, CRUD operations, note editing and detail navigation.',
-        'technologies': ['Flutter', 'Dart', 'SQLite', 'CRUD'],
+        'A Flutter note-taking application with local SQLite storage, '
+            'CRUD operations, note editing and detailed note navigation.',
+        'technologies': [
+          'Flutter',
+          'Dart',
+          'SQLite',
+          'CRUD',
+        ],
         'icon': Icons.note_alt_outlined,
       },
       {
         'title': 'Barber Booking',
+        'category': 'Full Stack Application',
         'description':
-        'A booking application designed to manage barber services and appointments with a Flutter frontend and Spring Boot backend.',
-        'technologies': ['Flutter', 'Dart', 'Java', 'Spring Boot', 'REST API'],
+        'A booking application for managing barber services and '
+            'appointments with a Flutter frontend and Spring Boot backend.',
+        'technologies': [
+          'Flutter',
+          'Dart',
+          'Java',
+          'Spring Boot',
+          'REST API',
+        ],
         'icon': Icons.content_cut_outlined,
       },
       {
         'title': 'MedicarePlus',
+        'category': 'Healthcare Application',
         'description':
-        'Doctor appointment booking platform designed for patients, doctors and administrators with a modern Flutter interface.',
-        'technologies': ['Flutter', 'Dart', 'Java', 'Spring Boot', 'MySQL'],
+        'A doctor appointment booking platform designed for patients, '
+            'doctors and administrators with a modern Flutter interface.',
+        'technologies': [
+          'Flutter',
+          'Dart',
+          'Java',
+          'Spring Boot',
+          'MySQL',
+        ],
         'icon': Icons.medical_services_outlined,
       },
       {
         'title': 'B2B Trade Portal',
+        'category': 'Business Application',
         'description':
-        'A business-to-business trading platform concept focused on connecting businesses and simplifying product and service interactions.',
-        'technologies': ['Flutter', 'Dart', 'REST API', 'Backend'],
+        'A business-to-business trading platform concept focused on '
+            'connecting businesses and simplifying product and service interactions.',
+        'technologies': [
+          'Flutter',
+          'Dart',
+          'REST API',
+          'Backend',
+        ],
         'icon': Icons.business_center_outlined,
       },
     ];
@@ -45,7 +75,9 @@ class ProjectsSection extends StatelessWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1100),
+          constraints: const BoxConstraints(
+            maxWidth: 1100,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -59,11 +91,11 @@ class ProjectsSection extends StatelessWidget {
               const SizedBox(height: 10),
 
               Text(
-                'Projects that showcase my development skills and practical experience.',
+                'A selection of applications and projects built while learning, '
+                    'experimenting and solving practical problems.',
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color?.withValues(
-                    alpha: 0.7,
-                  ),
+                  height: 1.6,
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
                 ),
               ),
 
@@ -79,14 +111,15 @@ class ProjectsSection extends StatelessWidget {
 
                   return GridView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics:
+                    const NeverScrollableScrollPhysics(),
                     itemCount: projects.length,
                     gridDelegate:
                     SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                      childAspectRatio: 1.25,
+                      crossAxisSpacing: 22,
+                      mainAxisSpacing: 22,
+                      childAspectRatio: 1.18,
                     ),
                     itemBuilder: (context, index) {
                       return _ProjectCard(
@@ -121,78 +154,113 @@ class _ProjectCardState extends State<_ProjectCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
+
       onEnter: (_) {
         setState(() {
           isHovered = true;
         });
       },
+
       onExit: (_) {
         setState(() {
           isHovered = false;
         });
       },
+
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        transform: Matrix4.identity()
-          ..translate(0.0, isHovered ? -6.0 : 0.0),
+        duration: const Duration(milliseconds: 220),
+
+        transform: Matrix4.translationValues(
+          0,
+          isHovered ? -6 : 0,
+          0,
+        ),
+
         padding: const EdgeInsets.all(24),
+
         decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(20),
+
           border: Border.all(
             color: isHovered
-                ? theme.colorScheme.primary.withValues(alpha: 0.5)
-                : theme.colorScheme.primary.withValues(alpha: 0.12),
+                ? primaryColor.withOpacity(0.45)
+                : primaryColor.withOpacity(0.12),
           ),
+
           boxShadow: isHovered
               ? [
             BoxShadow(
-              blurRadius: 20,
+              blurRadius: 25,
               spreadRadius: 1,
-              color: theme.colorScheme.primary.withValues(
-                alpha: 0.12,
-              ),
+              color: primaryColor.withOpacity(0.12),
             ),
           ]
               : [],
         ),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Top row
             Row(
               children: [
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 52,
+                  width: 52,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(
-                      alpha: 0.12,
-                    ),
+                    color: primaryColor.withOpacity(0.10),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
                     widget.project['icon'],
-                    color: theme.colorScheme.primary,
-                    size: 26,
+                    color: primaryColor,
+                    size: 27,
                   ),
                 ),
 
                 const Spacer(),
 
-                IconButton(
+                _ProjectIconButton(
+                  icon: Icons.code_rounded,
+                  tooltip: 'GitHub',
                   onPressed: () {
-                    // GitHub link will be added later.
+                    // GitHub URL will be connected later.
                   },
-                  icon: const Icon(Icons.open_in_new),
-                  tooltip: 'View Project',
+                ),
+
+                const SizedBox(width: 5),
+
+                _ProjectIconButton(
+                  icon: Icons.open_in_new_rounded,
+                  tooltip: 'Live Demo',
+                  onPressed: () {
+                    // Live demo URL will be connected later.
+                  },
                 ),
               ],
             ),
 
             const SizedBox(height: 20),
 
+            // Category
+            Text(
+              widget.project['category'],
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.8,
+                color: primaryColor,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            // Title
             Text(
               widget.project['title'],
               style: theme.textTheme.titleLarge?.copyWith(
@@ -200,22 +268,25 @@ class _ProjectCardState extends State<_ProjectCard> {
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
+            // Description
             Expanded(
               child: Text(
                 widget.project['description'],
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  height: 1.5,
+                  height: 1.55,
+                  color: theme.colorScheme.onSurface.withOpacity(0.72),
                 ),
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: 16),
 
+            // Technologies
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 7,
+              runSpacing: 7,
               children:
               (widget.project['technologies'] as List<String>)
                   .map(
@@ -223,19 +294,55 @@ class _ProjectCardState extends State<_ProjectCard> {
                   label: Text(
                     technology,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   backgroundColor:
-                  theme.colorScheme.primary.withValues(
-                    alpha: 0.08,
-                  ),
+                  primaryColor.withOpacity(0.08),
                   side: BorderSide.none,
+                  visualDensity:
+                  VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                  ),
                 ),
               )
                   .toList(),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProjectIconButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onPressed;
+
+  const _ProjectIconButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Tooltip(
+      message: tooltip,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(
+          icon,
+          size: 19,
+        ),
+        style: IconButton.styleFrom(
+          foregroundColor:
+          theme.colorScheme.onSurface.withOpacity(0.7),
         ),
       ),
     );
