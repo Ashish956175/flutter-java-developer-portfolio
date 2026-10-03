@@ -139,11 +139,12 @@ class _DesktopHome extends StatelessWidget {
               projectsKey: projectsKey,
               contactKey: contactKey,
             ),
-
             // Hero
             Container(
               key: homeKey,
-              child: const HeroSection(),
+              child: HeroSection(
+                onViewProjects: () => scrollToSection(projectsKey),
+              )
             ),
 
             // About
@@ -240,7 +241,9 @@ class _MobileHome extends StatelessWidget {
             // Hero
             Container(
               key: homeKey,
-              child: const HeroSection(),
+              child: HeroSection(
+                onViewProjects: () => scrollToSection(projectsKey),
+              ),
             ),
 
             // About
