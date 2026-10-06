@@ -1,7 +1,13 @@
+import 'dart:async';
+import 'dart:math' as math;
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HeroSection extends StatelessWidget {
+import '../widgets/hero_ambient_background.dart';
+
+class HeroSection extends StatefulWidget {
   final VoidCallback onViewProjects;
 
   const HeroSection({
@@ -9,7 +15,44 @@ class HeroSection extends StatelessWidget {
     required this.onViewProjects,
   });
 
-  // Open external URL
+  @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
+
+class _HeroSectionState extends State<HeroSection>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _profileController;
+
+  Timer? _clickTimer;
+
+  Offset _mousePosition = Offset.zero;
+
+  bool _isHoveringProfile = false;
+  bool _isClicked = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _profileController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 1200,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _clickTimer?.cancel();
+    _profileController.dispose();
+    super.dispose();
+  }
+
+  // ------------------------------------------------------------
+  // URL
+  // ------------------------------------------------------------
+
   Future<void> _openUrl(String url) async {
     final uri = Uri.parse(url);
 
@@ -21,7 +64,10 @@ class HeroSection extends StatelessWidget {
     }
   }
 
-  // Open email
+  // ------------------------------------------------------------
+  // EMAIL
+  // ------------------------------------------------------------
+
   Future<void> _sendEmail() async {
     final uri = Uri(
       scheme: 'mailto',
@@ -36,7 +82,10 @@ class HeroSection extends StatelessWidget {
     }
   }
 
-  // Open resume
+  // ------------------------------------------------------------
+  // RESUME
+  // ------------------------------------------------------------
+
   Future<void> _openResume() async {
     final uri = Uri.base.resolve(
       'resume/Ashish_Resume.pdf',
@@ -50,21 +99,86 @@ class HeroSection extends StatelessWidget {
     }
   }
 
+  // ------------------------------------------------------------
+  // PROFILE HOVER
+  // ------------------------------------------------------------
+
+  void _onProfileHover(PointerHoverEvent event) {
+    final renderObject = context.findRenderObject();
+
+    if (renderObject is! RenderBox) {
+      return;
+    }
+
+    final localPosition = renderObject.globalToLocal(
+      event.position,
+    );
+
+    setState(() {
+      _mousePosition = localPosition;
+      _isHoveringProfile = true;
+    });
+  }
+
+  void _onProfileExit(PointerExitEvent event) {
+    setState(() {
+      _mousePosition = Offset.zero;
+      _isHoveringProfile = false;
+    });
+  }
+
+  // ------------------------------------------------------------
+  // PROFILE CLICK ANIMATION
+  // ------------------------------------------------------------
+
+  void _animateProfile() {
+    _clickTimer?.cancel();
+
+    setState(() {
+      _isClicked = true;
+    });
+
+    _profileController.forward(from: 0);
+
+    _clickTimer = Timer(
+      const Duration(
+        milliseconds: 1250,
+      ),
+          () {
+        if (!mounted) return;
+
+        setState(() {
+          _isClicked = false;
+        });
+      },
+    );
+  }
+
+  // ------------------------------------------------------------
+  // MAIN BUILD
+  // ------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 600;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 70,
-        vertical: isMobile ? 55 : 90,
+    return HeroAmbientBackground(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 24 : 70,
+          vertical: isMobile ? 55 : 90,
+        ),
+        child: isMobile
+            ? _mobileHero(context)
+            : _desktopHero(context),
       ),
-      child: isMobile
-          ? _mobileHero(context)
-          : _desktopHero(context),
     );
   }
+
+  // ------------------------------------------------------------
+  // DESKTOP HERO
+  // ------------------------------------------------------------
 
   Widget _desktopHero(BuildContext context) {
     return ConstrainedBox(
@@ -78,9 +192,7 @@ class HeroSection extends StatelessWidget {
             flex: 6,
             child: _content(context),
           ),
-
           const SizedBox(width: 60),
-
           Expanded(
             flex: 4,
             child: Center(
@@ -92,26 +204,37 @@ class HeroSection extends StatelessWidget {
     );
   }
 
+  // ------------------------------------------------------------
+  // MOBILE HERO
+  // ------------------------------------------------------------
+
   Widget _mobileHero(BuildContext context) {
     return Column(
       children: [
         _profileVisual(context),
-
         const SizedBox(height: 45),
-
         _content(context),
       ],
     );
   }
 
+  // ------------------------------------------------------------
+  // CONTENT
+  // ------------------------------------------------------------
+
   Widget _content(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Small introduction
+        // --------------------------------------------------------
+        // GREETING
+        // --------------------------------------------------------
+
         Text(
           'HELLO, I AM',
           style: TextStyle(
@@ -124,13 +247,14 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 12),
 
-        // Name
+        // --------------------------------------------------------
+        // NAME
+        // --------------------------------------------------------
+
         Text(
           'Ashish',
           style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600
-                ? 46
-                : 64,
+            fontSize: isMobile ? 46 : 64,
             fontWeight: FontWeight.w800,
             letterSpacing: -1.5,
             color: theme.colorScheme.onSurface,
@@ -139,7 +263,10 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        // Role
+        // --------------------------------------------------------
+        // ROLE
+        // --------------------------------------------------------
+
         Text(
           'Flutter & Java Developer',
           style: theme.textTheme.headlineSmall?.copyWith(
@@ -150,7 +277,10 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 20),
 
-        // Tagline
+        // --------------------------------------------------------
+        // TAGLINE
+        // --------------------------------------------------------
+
         Text(
           'Think. Create. Evolve.',
           style: theme.textTheme.titleMedium?.copyWith(
@@ -161,7 +291,10 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 18),
 
-        // Description
+        // --------------------------------------------------------
+        // DESCRIPTION
+        // --------------------------------------------------------
+
         ConstrainedBox(
           constraints: const BoxConstraints(
             maxWidth: 650,
@@ -181,13 +314,16 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 30),
 
-        // Main buttons
+        // --------------------------------------------------------
+        // MAIN BUTTONS
+        // --------------------------------------------------------
+
         Wrap(
           spacing: 14,
           runSpacing: 12,
           children: [
             ElevatedButton.icon(
-              onPressed: onViewProjects,
+              onPressed: widget.onViewProjects,
               icon: const Icon(
                 Icons.arrow_forward_rounded,
               ),
@@ -195,7 +331,6 @@ class HeroSection extends StatelessWidget {
                 'View Projects',
               ),
             ),
-
             OutlinedButton.icon(
               onPressed: _openResume,
               icon: const Icon(
@@ -210,7 +345,10 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 28),
 
-        // Social buttons
+        // --------------------------------------------------------
+        // SOCIAL BUTTONS
+        // --------------------------------------------------------
+
         Wrap(
           spacing: 10,
           runSpacing: 10,
@@ -223,7 +361,6 @@ class HeroSection extends StatelessWidget {
                 'https://github.com/Ashish956175',
               ),
             ),
-
             _socialButton(
               context,
               Icons.business_center_outlined,
@@ -232,7 +369,6 @@ class HeroSection extends StatelessWidget {
                 'https://linkedin.com/in/ashish9561/',
               ),
             ),
-
             _socialButton(
               context,
               Icons.email_outlined,
@@ -244,9 +380,13 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 28),
 
-        // Availability
+        // --------------------------------------------------------
+        // AVAILABILITY
+        // --------------------------------------------------------
+
         Row(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 9,
@@ -256,9 +396,7 @@ class HeroSection extends StatelessWidget {
                 color: Colors.green,
               ),
             ),
-
             const SizedBox(width: 9),
-
             Flexible(
               child: Text(
                 'Open to software development opportunities',
@@ -275,6 +413,10 @@ class HeroSection extends StatelessWidget {
     );
   }
 
+  // ------------------------------------------------------------
+  // ANIMATED PROFILE
+  // ------------------------------------------------------------
+
   Widget _profileVisual(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
@@ -282,102 +424,281 @@ class HeroSection extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     final size = width < 600
-        ? 230.0
-        : 320.0;
+        ? 250.0
+        : 340.0;
 
-    return Container(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onHover: _onProfileHover,
+      onExit: _onProfileExit,
+      child: GestureDetector(
+        onTap: _animateProfile,
+        child: AnimatedBuilder(
+          animation: _profileController,
+          builder: (context, child) {
+            final progress = _profileController.value;
+
+            // ----------------------------------------------------
+            // CLICK PULSE
+            // ----------------------------------------------------
+
+            final pulse = math.sin(
+              progress * math.pi,
+            );
+
+            final clickScale =
+                1.0 + (pulse * 0.045);
+
+            // ----------------------------------------------------
+            // CLICK ROTATION
+            // ----------------------------------------------------
+
+            final clickRotation =
+                math.sin(
+                  progress * math.pi * 2,
+                ) *
+                    0.025;
+
+            // ----------------------------------------------------
+            // MOUSE TILT
+            // ----------------------------------------------------
+
+            double mouseTiltX = 0;
+            double mouseTiltY = 0;
+
+            if (_isHoveringProfile) {
+              final center = Offset(
+                size / 2,
+                size / 2,
+              );
+
+              final dx =
+                  (_mousePosition.dx - center.dx) /
+                      center.dx;
+
+              final dy =
+                  (_mousePosition.dy - center.dy) /
+                      center.dy;
+
+              mouseTiltY = dx.clamp(-1.0, 1.0) * 0.07;
+              mouseTiltX = -dy.clamp(-1.0, 1.0) * 0.07;
+            }
+
+            return TweenAnimationBuilder<double>(
+              tween: Tween<double>(
+                begin: 1,
+                end: clickScale,
+              ),
+              duration: const Duration(
+                milliseconds: 100,
+              ),
+              curve: Curves.easeOut,
+              builder: (
+                  context,
+                  scale,
+                  profileChild,
+                  ) {
+                return Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.identity()
+                    ..setEntry(
+                      3,
+                      2,
+                      0.0015,
+                    )
+                    ..rotateX(
+                      mouseTiltX,
+                    )
+                    ..rotateY(
+                      mouseTiltY,
+                    )
+                    ..rotateZ(
+                      clickRotation,
+                    )
+                    ..translateByDouble(
+                      0.0,
+                      _isHoveringProfile ? -5.0 : 0.0,
+                      0.0,
+                      1.0,
+                    )
+                    ..scaleByDouble(
+                      scale,
+                      scale,
+                      scale,
+                      1.0,
+                    ),
+                  child: profileChild,
+                );
+              },
+              child: _profileContainer(
+                context,
+                size,
+                primaryColor,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  // ------------------------------------------------------------
+  // PROFILE CONTAINER
+  // ------------------------------------------------------------
+
+  Widget _profileContainer(
+      BuildContext context,
+      double size,
+      Color primaryColor,
+      ) {
+    final theme = Theme.of(context);
+
+    final isDark =
+        theme.brightness == Brightness.dark;
+
+    final glowStrength =
+    _isClicked ? 0.34 : 0.16;
+
+    return AnimatedContainer(
+      duration: const Duration(
+        milliseconds: 300,
+      ),
       width: size,
       height: size,
+      padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: [
-            primaryColor.withValues(alpha: 0.18),
-            primaryColor.withValues(alpha: 0.05),
-          ],
-        ),
-        border: Border.all(
-          color: primaryColor.withValues(alpha: 0.35),
-          width: 2,
-        ),
+
+        // Outer blue glow.
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withValues(alpha: 0.12),
-            blurRadius: 35,
-            spreadRadius: 5,
+            color: primaryColor.withValues(
+              alpha: glowStrength,
+            ),
+            blurRadius: _isClicked ? 65 : 38,
+            spreadRadius: _isClicked ? 12 : 5,
           ),
+
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withValues(
+                alpha: 0.10,
+              ),
+              blurRadius: 24,
+              offset: const Offset(
+                0,
+                12,
+              ),
+            ),
         ],
       ),
+
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Icon(
-            Icons.code_rounded,
-            size: size * 0.36,
-            color: primaryColor,
-          ),
+          // ------------------------------------------------------
+          // PROFILE IMAGE
+          // ------------------------------------------------------
 
-          Positioned(
-            top: size * 0.12,
-            right: size * 0.15,
-            child: _techIcon(
-              context,
-              Icons.phone_android_rounded,
+          AnimatedScale(
+            scale: _isClicked ? 1.025 : 1.0,
+            duration: const Duration(
+              milliseconds: 300,
+            ),
+            curve: Curves.easeOutBack,
+            child: Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+
+                border: Border.all(
+                  color: primaryColor.withValues(
+                    alpha: _isClicked ? 0.95 : 0.75,
+                  ),
+                  width: _isClicked ? 4 : 3,
+                ),
+              ),
+
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/profile_image.png',
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  filterQuality: FilterQuality.high,
+                ),
+              ),
             ),
           ),
 
-          Positioned(
-            bottom: size * 0.13,
-            left: size * 0.14,
-            child: _techIcon(
-              context,
-              Icons.storage_rounded,
+          // ------------------------------------------------------
+          // INNER LIGHT RING
+          // ------------------------------------------------------
+
+          IgnorePointer(
+            child: Container(
+              width: size * 0.90,
+              height: size * 0.90,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withValues(
+                    alpha: isDark ? 0.12 : 0.20,
+                  ),
+                  width: 1,
+                ),
+              ),
             ),
           ),
 
-          Positioned(
-            bottom: size * 0.18,
-            right: size * 0.10,
-            child: _techIcon(
-              context,
-              Icons.cloud_outlined,
+          // ------------------------------------------------------
+          // CLICK RIPPLE RING
+          // ------------------------------------------------------
+
+          if (_isClicked)
+            IgnorePointer(
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(
+                  begin: 0.85,
+                  end: 1.15,
+                ),
+                duration: const Duration(
+                  milliseconds: 700,
+                ),
+                curve: Curves.easeOut,
+                builder: (
+                    context,
+                    rippleScale,
+                    child,
+                    ) {
+                  return Transform.scale(
+                    scale: rippleScale,
+                    child: Container(
+                      width: size * 0.90,
+                      height: size * 0.90,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: primaryColor.withValues(
+                            alpha: 0.35,
+                          ),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _techIcon(
-      BuildContext context,
-      IconData icon,
-      ) {
-    final theme = Theme.of(context);
-    final primaryColor = theme.colorScheme.primary;
-
-    return Container(
-      width: 52,
-      height: 52,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: theme.colorScheme.surface,
-        border: Border.all(
-          color: primaryColor.withValues(alpha: 0.25),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-          ),
-        ],
-      ),
-      child: Icon(
-        icon,
-        color: primaryColor,
-        size: 24,
-      ),
-    );
-  }
+  // ------------------------------------------------------------
+  // SOCIAL BUTTON
+  // ------------------------------------------------------------
 
   Widget _socialButton(
       BuildContext context,
