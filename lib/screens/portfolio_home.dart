@@ -10,6 +10,7 @@ import '../sections/hero_section.dart';
 import '../sections/projects_section.dart';
 import '../sections/skills_section.dart';
 import '../widgets/responsive_layout.dart';
+import '../widgets/scroll_reveal.dart';
 
 class PortfolioHome extends StatefulWidget {
   final VoidCallback onThemeChanged;
@@ -191,7 +192,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: aboutKey,
-              child: const AboutSection(),
+              child: ScrollReveal(child: const AboutSection()),
             ),
 
             // =================================================
@@ -200,7 +201,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: skillsKey,
-              child: const SkillsSection(),
+              child: ScrollReveal(child: const SkillsSection()),
             ),
 
             // =================================================
@@ -209,7 +210,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: experienceKey,
-              child: const ExperienceSection(),
+              child: ScrollReveal(child: const ExperienceSection()),
             ),
 
             // =================================================
@@ -218,7 +219,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: projectsKey,
-              child: const ProjectsSection(),
+              child: ScrollReveal(child: const ProjectsSection()),
             ),
 
             // =================================================
@@ -227,7 +228,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: certificationsKey,
-              child: const CertificationsSection(),
+              child: ScrollReveal(child: const CertificationsSection()),
             ),
 
             // =================================================
@@ -236,7 +237,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: educationKey,
-              child: const EducationSection(),
+              child: ScrollReveal(child: const EducationSection()),
             ),
 
             // =================================================
@@ -245,7 +246,7 @@ class _DesktopHome extends StatelessWidget {
 
             Container(
               key: contactKey,
-              child: const ContactSection(),
+              child: ScrollReveal(child: const ContactSection()),
             ),
           ],
         ),
