@@ -77,7 +77,7 @@ Here is a visual tour of the responsive Flutter Portfolio across **Desktop** and
 
 | Mobile Hero & Intro | Mobile Experience | Mobile Projects & Skills | Mobile Contact & Connect |
 | :---: | :---: | :---: | :---: |
-| ![Mobile Hero](docs/mobile_screens/Screenshot_20261006_185811.png) | ![Mobile Experience](docs/mobile_screens/Screenshot_20261006_185917.png) | ![Mobile Projects](docs/mobile_screens/Screenshot_20261006_185931.png) | ![Mobile Contact](docs/mobile_screens/Screenshot_20261006_190050.png) |
+| ![Mobile Hero](docs/mobile_screens/Screenshot_20261006_185903.png) | ![Mobile Experience](docs/mobile_screens/Screenshot_20261006_185917.png) | ![Mobile Projects](docs/mobile_screens/Screenshot_20261006_185931.png) | ![Mobile Contact](docs/mobile_screens/Screenshot_20261006_190050.png) |
 
 ---
 
