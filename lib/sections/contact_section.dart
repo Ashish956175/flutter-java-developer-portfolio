@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
@@ -49,8 +48,13 @@ class ContactSection extends StatelessWidget {
           ),
           child: Column(
             children: [
+              // =================================================
+              // HEADER
+              // =================================================
+
               Text(
                 'Let’s Connect',
+                textAlign: TextAlign.center,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -59,18 +63,21 @@ class ContactSection extends StatelessWidget {
               const SizedBox(height: 10),
 
               Text(
-                'I am open to software development opportunities, '
-                    'internships, and interesting projects.',
+                'Let’s build something meaningful together.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  height: 1.6,
-                  color: theme.textTheme.bodyMedium?.color?.withValues(
-                    alpha: 0.7,
+                  color: theme.colorScheme.onSurface.withValues(
+                    alpha: 0.70,
                   ),
+                  height: 1.5,
                 ),
               ),
 
-              const SizedBox(height: 35),
+              const SizedBox(height: 40),
+
+              // =================================================
+              // CONTACT CARD
+              // =================================================
 
               Container(
                 width: double.infinity,
@@ -79,146 +86,136 @@ class ContactSection extends StatelessWidget {
                   color: theme.cardColor,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: primary.withValues(alpha: 0.15),
+                    color: primary.withValues(alpha: 0.12),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Have an opportunity or project in mind?',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      'Feel free to reach out through any of the '
-                          'platforms below.',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.textTheme.bodyMedium?.color?.withValues(
-                          alpha: 0.7,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        final isMobile = constraints.maxWidth < 700;
-
-                        final items = [
-                          _ContactItem(
-                            icon: Icons.email_outlined,
-                            title: 'Email',
-                            value: 'ashishgaikwad9561@gmail.com',
-                            onTap: _sendEmail,
-                          ),
-
-                          _ContactItem(
-                            icon: Icons.code_outlined,
-                            title: 'GitHub',
-                            value: 'github.com/Ashish956175',
-                            onTap: () => _openUrl(
-                              'https://github.com/Ashish956175',
-                            ),
-                          ),
-
-                          _ContactItem(
-                            icon: Icons.work_outline,
-                            title: 'LinkedIn',
-                            value: 'linkedin.com/in/ashish9561/',
-                            onTap: () => _openUrl(
-                              'https://linkedin.com/in/ashish9561/',
-                            ),
-                          ),
-                        ];
-
-                        if (isMobile) {
-                          return Column(
-                            children: [
-                              for (int i = 0; i < items.length; i++) ...[
-                                items[i],
-                                if (i != items.length - 1)
-                                  const SizedBox(height: 20),
-                              ],
-                            ],
-                          );
-                        }
-
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: items[0],
-                            ),
-
-                            const SizedBox(width: 20),
-
-                            Expanded(
-                              child: items[1],
-                            ),
-
-                            const SizedBox(width: 20),
-
-                            Expanded(
-                              child: items[2],
-                            ),
-                          ],
-                        );
-                      },
+                  boxShadow: [
+                    BoxShadow(
+                      color: primary.withValues(alpha: 0.05),
+                      blurRadius: 30,
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isMobile = constraints.maxWidth < 700;
+
+                    if (isMobile) {
+                      return Column(
+                        children: [
+                          _ContactIntro(),
+                          const SizedBox(height: 30),
+                          _ContactItems(
+                            onEmail: _sendEmail,
+                            onGitHub: () => _openUrl(
+                              'https://github.com/Ashish956175',
+                            ),
+                            onLinkedIn: () => _openUrl(
+                              'https://linkedin.com/in/ashish9561/',
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: _ContactIntro(),
+                        ),
+                        const SizedBox(width: 50),
+                        Expanded(
+                          flex: 6,
+                          child: _ContactItems(
+                            onEmail: _sendEmail,
+                            onGitHub: () => _openUrl(
+                              'https://github.com/Ashish956175',
+                            ),
+                            onLinkedIn: () => _openUrl(
+                              'https://linkedin.com/in/ashish9561/',
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
 
-              const SizedBox(height: 45),
+              const SizedBox(height: 50),
+
+              // =================================================
+              // AVAILABILITY
+              // =================================================
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.code_outlined,
-                    size: 16,
-                    color: theme.textTheme.bodySmall?.color?.withValues(
-                      alpha: 0.6,
+                  Container(
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.green.withValues(
+                            alpha: 0.35,
+                          ),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
                   ),
-
-                  const SizedBox(width: 7),
-
+                  const SizedBox(width: 9),
                   Text(
-                    'Built with Flutter',
+                    'Open to software development opportunities',
+                    textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.textTheme.bodySmall?.color?.withValues(
-                        alpha: 0.6,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  Text(
-                    '•',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: primary,
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  Text(
-                    '© ${DateTime.now().year} Ashish',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.textTheme.bodySmall?.color?.withValues(
-                        alpha: 0.6,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.65,
                       ),
                     ),
                   ),
                 ],
+              ),
+
+              const SizedBox(height: 28),
+
+              // =================================================
+              // FOOTER
+              // =================================================
+
+              Divider(
+                color: theme.dividerColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
+
+              const SizedBox(height: 22),
+
+              Text(
+                'Think. Create. Evolve.',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: primary,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                'Built with Flutter • © ${DateTime.now().year} Ashish',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(
+                    alpha: 0.55,
+                  ),
+                ),
               ),
             ],
           ),
@@ -227,6 +224,138 @@ class ContactSection extends StatelessWidget {
     );
   }
 }
+
+// ==========================================================
+// CONTACT INTRO
+// ==========================================================
+
+class _ContactIntro extends StatelessWidget {
+  const _ContactIntro();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            color: primary.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: primary.withValues(alpha: 0.15),
+            ),
+          ),
+          child: Icon(
+            Icons.handshake_outlined,
+            size: 32,
+            color: primary,
+          ),
+        ),
+
+        const SizedBox(height: 22),
+
+        Text(
+          'Let’s build something together.',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            height: 1.25,
+          ),
+        ),
+
+        const SizedBox(height: 14),
+
+        Text(
+          'I’m interested in software development opportunities, '
+              'collaborative projects, and building practical applications '
+              'that solve real-world problems.',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            height: 1.7,
+            color: theme.colorScheme.onSurface.withValues(
+              alpha: 0.70,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 18),
+
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 9,
+          ),
+          decoration: BoxDecoration(
+            color: primary.withValues(alpha: 0.07),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            'Flutter • Java • Spring Boot • AWS',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ==========================================================
+// CONTACT ITEMS
+// ==========================================================
+
+class _ContactItems extends StatelessWidget {
+  final VoidCallback onEmail;
+  final VoidCallback onGitHub;
+  final VoidCallback onLinkedIn;
+
+  const _ContactItems({
+    required this.onEmail,
+    required this.onGitHub,
+    required this.onLinkedIn,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _ContactItem(
+          icon: Icons.email_outlined,
+          title: 'Email',
+          value: 'ashishgaikwad9561@gmail.com',
+          onTap: onEmail,
+        ),
+
+        const SizedBox(height: 14),
+
+        _ContactItem(
+          icon: Icons.code_rounded,
+          title: 'GitHub',
+          value: 'github.com/Ashish956175',
+          onTap: onGitHub,
+        ),
+
+        const SizedBox(height: 14),
+
+        _ContactItem(
+          icon: Icons.work_outline_rounded,
+          title: 'LinkedIn',
+          value: 'linkedin.com/in/ashish9561',
+          onTap: onLinkedIn,
+        ),
+      ],
+    );
+  }
+}
+
+// ==========================================================
+// CONTACT ITEM
+// ==========================================================
 
 class _ContactItem extends StatefulWidget {
   final IconData icon;
@@ -255,90 +384,91 @@ class _ContactItemState extends State<_ContactItem> {
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       onEnter: (_) {
         setState(() {
           isHovered = true;
         });
       },
-
       onExit: (_) {
         setState(() {
           isHovered = false;
         });
       },
-
       child: GestureDetector(
         onTap: widget.onTap,
-
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-
-          padding: const EdgeInsets.all(20),
-
+          curve: Curves.easeOut,
+          transform: Matrix4.translationValues(
+            isHovered ? 4 : 0,
+            0,
+            0,
+          ),
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isHovered
-                ? primary.withValues(alpha: 0.07)
-                : Colors.transparent,
-
-            borderRadius: BorderRadius.circular(16),
-
+                ? primary.withValues(alpha: 0.06)
+                : theme.scaffoldBackgroundColor.withValues(
+              alpha: 0.35,
+            ),
+            borderRadius: BorderRadius.circular(15),
             border: Border.all(
               color: isHovered
                   ? primary.withValues(alpha: 0.25)
-                  : Colors.transparent,
+                  : theme.dividerColor.withValues(alpha: 0.25),
             ),
           ),
-
-          child: Column(
+          child: Row(
             children: [
               Container(
-                height: 56,
-                width: 56,
-
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
-                  color: primary.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(16),
+                  color: primary.withValues(alpha: 0.09),
+                  borderRadius: BorderRadius.circular(13),
                 ),
-
                 child: Icon(
                   widget.icon,
                   color: primary,
-                  size: 27,
+                  size: 22,
                 ),
               ),
 
-              const SizedBox(height: 13),
+              const SizedBox(width: 14),
 
-              Text(
-                widget.title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.60,
+                        ),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.value,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              const SizedBox(height: 6),
-
-              Text(
-                widget.value,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  height: 1.4,
-                  color: theme.textTheme.bodySmall?.color?.withValues(
-                    alpha: 0.7,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              Text(
-                'Open',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: primary,
-                  fontWeight: FontWeight.w600,
+              Icon(
+                Icons.arrow_outward_rounded,
+                size: 19,
+                color: isHovered
+                    ? primary
+                    : theme.colorScheme.onSurface.withValues(
+                  alpha: 0.45,
                 ),
               ),
             ],
