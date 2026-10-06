@@ -39,7 +39,7 @@ class HeroSection extends StatelessWidget {
   // Open resume
   Future<void> _openResume() async {
     final uri = Uri.base.resolve(
-      'resume/resume_2_coloured.pdf',
+      'resume/Ashish_Resume.pdf',
     );
 
     if (await canLaunchUrl(uri)) {

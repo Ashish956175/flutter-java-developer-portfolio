@@ -33,7 +33,7 @@ class ExperienceSection extends StatelessWidget {
                 'My professional experience and technical journey.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   height: 1.6,
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
 
@@ -95,8 +95,8 @@ class _ExperienceCardState extends State<_ExperienceCard> {
 
           border: Border.all(
             color: isHovered
-                ? primaryColor.withOpacity(0.4)
-                : primaryColor.withOpacity(0.12),
+                ? primaryColor.withValues(alpha: 0.4)
+                : primaryColor.withValues(alpha: 0.12),
           ),
 
           boxShadow: isHovered
@@ -104,7 +104,7 @@ class _ExperienceCardState extends State<_ExperienceCard> {
             BoxShadow(
               blurRadius: 24,
               spreadRadius: 1,
-              color: primaryColor.withOpacity(0.10),
+              color: primaryColor.withValues(alpha: 0.10),
             ),
           ]
               : [],
@@ -118,7 +118,7 @@ class _ExperienceCardState extends State<_ExperienceCard> {
             const SizedBox(height: 30),
 
             Divider(
-              color: theme.dividerColor.withOpacity(0.5),
+              color: theme.dividerColor.withValues(alpha: 0.5),
             ),
 
             const SizedBox(height: 26),
@@ -195,7 +195,7 @@ class _ExperienceCardState extends State<_ExperienceCard> {
                     ),
                   ),
                   backgroundColor:
-                  primaryColor.withOpacity(0.08),
+                  primaryColor.withValues(alpha: 0.08),
                   side: BorderSide.none,
                   visualDensity: VisualDensity.compact,
                 );
@@ -223,7 +223,7 @@ class _ExperienceHeader extends StatelessWidget {
           height: 58,
           width: 58,
           decoration: BoxDecoration(
-            color: primaryColor.withOpacity(0.10),
+            color: primaryColor.withValues(alpha: 0.10),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Icon(
@@ -299,13 +299,13 @@ class _HeaderInfo extends StatelessWidget {
         Icon(
           icon,
           size: 16,
-          color: theme.colorScheme.onSurface.withOpacity(0.6),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
         ),
         const SizedBox(width: 5),
         Text(
           text,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.65),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
           ),
         ),
       ],
@@ -346,7 +346,7 @@ class _ExperiencePoint extends StatelessWidget {
               text,
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.55,
-                color: theme.colorScheme.onSurface.withOpacity(0.82),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.82),
               ),
             ),
           ),

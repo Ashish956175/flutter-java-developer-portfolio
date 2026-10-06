@@ -83,7 +83,7 @@ class SkillsSection extends StatelessWidget {
                     'across frontend, backend, databases and cloud.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   height: 1.6,
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
 
@@ -181,8 +181,8 @@ class _SkillCategoryCardState
 
           border: Border.all(
             color: isHovered
-                ? primaryColor.withOpacity(0.4)
-                : primaryColor.withOpacity(0.12),
+                ? primaryColor.withValues(alpha: 0.4)
+                : primaryColor.withValues(alpha: 0.12),
           ),
 
           boxShadow: isHovered
@@ -190,7 +190,7 @@ class _SkillCategoryCardState
             BoxShadow(
               blurRadius: 20,
               spreadRadius: 1,
-              color: primaryColor.withOpacity(0.10),
+              color: primaryColor.withValues(alpha: 0.10),
             ),
           ]
               : [],
@@ -205,7 +205,7 @@ class _SkillCategoryCardState
                   height: 45,
                   width: 45,
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.10),
+                    color: primaryColor.withValues(alpha: 0.10),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -267,10 +267,10 @@ class _SkillChip extends StatelessWidget {
         vertical: 8,
       ),
       decoration: BoxDecoration(
-        color: primaryColor.withOpacity(0.07),
+        color: primaryColor.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: primaryColor.withOpacity(0.10),
+          color: primaryColor.withValues(alpha: 0.10),
         ),
       ),
       child: Row(

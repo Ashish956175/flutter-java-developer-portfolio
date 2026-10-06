@@ -20,7 +20,7 @@ class ResponsiveLayout extends StatelessWidget {
           return mobile;
         }
 
-        if (constraints.maxWidth < 1024) {
+        if (constraints.maxWidth < 1100) {
           return tablet;
         }
 

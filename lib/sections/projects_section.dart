@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     final projects = [
+      // --------------------------------------------------
+      // 1. NOTE EDITOR
+      // --------------------------------------------------
       {
         'title': 'Note Editor',
         'category': 'Flutter Application',
         'description':
-        'A Flutter note-taking application with local SQLite storage, '
-            'CRUD operations, note editing and detailed note navigation.',
+        'A simple Flutter note editor application for creating, '
+            'editing, deleting and managing notes with local data storage.',
         'technologies': [
           'Flutter',
           'Dart',
@@ -21,50 +36,117 @@ class ProjectsSection extends StatelessWidget {
           'CRUD',
         ],
         'icon': Icons.note_alt_outlined,
+        'github':
+        'https://github.com/Ashish956175/Note_Editor_App_Flutter',
       },
+
+      // --------------------------------------------------
+      // 2. BARBER BOOKING
+      // --------------------------------------------------
       {
         'title': 'Barber Booking',
         'category': 'Full Stack Application',
         'description':
-        'A booking application for managing barber services and '
-            'appointments with a Flutter frontend and Spring Boot backend.',
+        'A modern Barber and Salon Booking platform built with '
+            'Flutter and Spring Boot REST APIs for managing services '
+            'and appointments.',
         'technologies': [
           'Flutter',
           'Dart',
           'Java',
           'Spring Boot',
           'REST API',
+          'MongoDB',
         ],
         'icon': Icons.content_cut_outlined,
+        'github':
+        'https://github.com/Ashish956175/BarberBooking',
       },
+
+      // --------------------------------------------------
+      // 3. MEDICAREPLUS
+      // --------------------------------------------------
       {
         'title': 'MedicarePlus',
         'category': 'Healthcare Application',
         'description':
-        'A doctor appointment booking platform designed for patients, '
-            'doctors and administrators with a modern Flutter interface.',
+        'A full-stack healthcare appointment platform designed '
+            'for patients, doctors and administrators with a Flutter '
+            'frontend and Spring Boot backend.',
         'technologies': [
           'Flutter',
           'Dart',
           'Java',
           'Spring Boot',
           'MySQL',
+          'REST API',
         ],
         'icon': Icons.medical_services_outlined,
+        'github':
+        'https://github.com/Ashish956175/MedicarePlus',
       },
+
+      // --------------------------------------------------
+      // 4. BANK MANAGEMENT SYSTEM
+      // --------------------------------------------------
       {
-        'title': 'B2B Trade Portal',
-        'category': 'Business Application',
+        'title': 'Bank Management System',
+        'category': 'Java Application',
         'description':
-        'A business-to-business trading platform concept focused on '
-            'connecting businesses and simplifying product and service interactions.',
+        'A Java-based banking application focused on implementing '
+            'core banking operations and practicing object-oriented '
+            'programming concepts.',
+        'technologies': [
+          'Java',
+          'OOP',
+          'Banking',
+        ],
+        'icon': Icons.account_balance_outlined,
+        'github':
+        'https://github.com/Ashish956175/Bank_Management_System',
+      },
+
+      // --------------------------------------------------
+      // 5. SHARED PREFERENCES FLUTTER
+      // --------------------------------------------------
+      {
+        'title': 'Shared Preferences Flutter',
+        'category': 'Flutter Application',
+        'description':
+        'A Flutter application demonstrating persistent local '
+            'login state using Shared Preferences.',
         'technologies': [
           'Flutter',
           'Dart',
-          'REST API',
-          'Backend',
+          'Shared Preferences',
+          'Local Storage',
         ],
-        'icon': Icons.business_center_outlined,
+        'icon': Icons.settings_backup_restore_outlined,
+        'github':
+        'https://github.com/Ashish956175/Shared_Preferences_Flutter',
+      },
+
+      // --------------------------------------------------
+      // 6. PORTFOLIO
+      // --------------------------------------------------
+      {
+        'title': 'Flutter & Java Developer Portfolio',
+        'category': 'Flutter Web Application',
+        'description':
+        'A responsive developer portfolio built with Flutter Web '
+            'to showcase software development skills, experience, '
+            'projects, certifications, education and contact information.',
+        'technologies': [
+          'Flutter',
+          'Dart',
+          'Responsive UI',
+          'URL Launcher',
+          'Git',
+          'GitHub',
+        ],
+        'icon': Icons.web_outlined,
+        'github':
+        'https://github.com/Ashish956175/flutter-java-developer-portfolio',
       },
     ];
 
@@ -81,6 +163,9 @@ class ProjectsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // --------------------------------------------------
+              // SECTION TITLE
+              // --------------------------------------------------
               Text(
                 'Featured Projects',
                 style: theme.textTheme.headlineMedium?.copyWith(
@@ -91,16 +176,21 @@ class ProjectsSection extends StatelessWidget {
               const SizedBox(height: 10),
 
               Text(
-                'A selection of applications and projects built while learning, '
-                    'experimenting and solving practical problems.',
+                'A selection of applications and projects built while '
+                    'learning, experimenting and solving practical problems.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   height: 1.6,
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withValues(
+                    alpha: 0.7,
+                  ),
                 ),
               ),
 
               const SizedBox(height: 40),
 
+              // --------------------------------------------------
+              // PROJECT GRID
+              // --------------------------------------------------
               LayoutBuilder(
                 builder: (context, constraints) {
                   int columns = 1;
@@ -119,11 +209,12 @@ class ProjectsSection extends StatelessWidget {
                       crossAxisCount: columns,
                       crossAxisSpacing: 22,
                       mainAxisSpacing: 22,
-                      childAspectRatio: 1.18,
+                      childAspectRatio: 1.15,
                     ),
                     itemBuilder: (context, index) {
                       return _ProjectCard(
                         project: projects[index],
+                        onOpenUrl: _openUrl,
                       );
                     },
                   );
@@ -137,11 +228,17 @@ class ProjectsSection extends StatelessWidget {
   }
 }
 
+// ==========================================================
+// PROJECT CARD
+// ==========================================================
+
 class _ProjectCard extends StatefulWidget {
   final Map<String, dynamic> project;
+  final Future<void> Function(String url) onOpenUrl;
 
   const _ProjectCard({
     required this.project,
+    required this.onOpenUrl,
   });
 
   @override
@@ -156,23 +253,26 @@ class _ProjectCardState extends State<_ProjectCard> {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
+    final String githubUrl =
+        widget.project['github'] as String? ?? '';
 
+    final bool hasGithub = githubUrl.isNotEmpty;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.basic,
       onEnter: (_) {
         setState(() {
           isHovered = true;
         });
       },
-
       onExit: (_) {
         setState(() {
           isHovered = false;
         });
       },
-
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
 
         transform: Matrix4.translationValues(
           0,
@@ -188,8 +288,8 @@ class _ProjectCardState extends State<_ProjectCard> {
 
           border: Border.all(
             color: isHovered
-                ? primaryColor.withOpacity(0.45)
-                : primaryColor.withOpacity(0.12),
+                ? primaryColor.withValues(alpha: 0.45)
+                : primaryColor.withValues(alpha: 0.12),
           ),
 
           boxShadow: isHovered
@@ -197,7 +297,8 @@ class _ProjectCardState extends State<_ProjectCard> {
             BoxShadow(
               blurRadius: 25,
               spreadRadius: 1,
-              color: primaryColor.withOpacity(0.12),
+              color: primaryColor.withValues(alpha: 0.12),
+              offset: const Offset(0, 8),
             ),
           ]
               : [],
@@ -206,18 +307,22 @@ class _ProjectCardState extends State<_ProjectCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top row
+            // --------------------------------------------------
+            // ICON + GITHUB BUTTON
+            // --------------------------------------------------
             Row(
               children: [
                 Container(
                   height: 52,
                   width: 52,
+
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.10),
+                    color: primaryColor.withValues(alpha: 0.10),
                     borderRadius: BorderRadius.circular(14),
                   ),
+
                   child: Icon(
-                    widget.project['icon'],
+                    widget.project['icon'] as IconData,
                     color: primaryColor,
                     size: 27,
                   ),
@@ -225,31 +330,50 @@ class _ProjectCardState extends State<_ProjectCard> {
 
                 const Spacer(),
 
-                _ProjectIconButton(
-                  icon: Icons.code_rounded,
-                  tooltip: 'GitHub',
-                  onPressed: () {
-                    // GitHub URL will be connected later.
-                  },
-                ),
+                if (hasGithub)
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      widget.onOpenUrl(githubUrl);
+                    },
 
-                const SizedBox(width: 5),
+                    icon: const Icon(
+                      Icons.code_rounded,
+                      size: 18,
+                    ),
 
-                _ProjectIconButton(
-                  icon: Icons.open_in_new_rounded,
-                  tooltip: 'Live Demo',
-                  onPressed: () {
-                    // Live demo URL will be connected later.
-                  },
-                ),
+                    label: const Text(
+                      'GitHub',
+                    ),
+
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: primaryColor,
+
+                      side: BorderSide(
+                        color: primaryColor.withValues(
+                          alpha: 0.25,
+                        ),
+                      ),
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                    ),
+                  ),
               ],
             ),
 
             const SizedBox(height: 20),
 
-            // Category
+            // --------------------------------------------------
+            // CATEGORY
+            // --------------------------------------------------
             Text(
-              widget.project['category'],
+              widget.project['category'] as String,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -260,50 +384,73 @@ class _ProjectCardState extends State<_ProjectCard> {
 
             const SizedBox(height: 6),
 
-            // Title
+            // --------------------------------------------------
+            // PROJECT TITLE
+            // --------------------------------------------------
             Text(
-              widget.project['title'],
+              widget.project['title'] as String,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
+                height: 1.3,
               ),
             ),
 
             const SizedBox(height: 12),
 
-            // Description
+            // --------------------------------------------------
+            // DESCRIPTION
+            // --------------------------------------------------
             Expanded(
               child: Text(
-                widget.project['description'],
+                widget.project['description'] as String,
+
                 style: theme.textTheme.bodyMedium?.copyWith(
                   height: 1.55,
-                  color: theme.colorScheme.onSurface.withOpacity(0.72),
+                  color: theme.colorScheme.onSurface.withValues(
+                    alpha: 0.72,
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 16),
 
-            // Technologies
+            // --------------------------------------------------
+            // TECHNOLOGIES
+            // --------------------------------------------------
             Wrap(
               spacing: 7,
               runSpacing: 7,
+
               children:
-              (widget.project['technologies'] as List<String>)
+              (widget.project['technologies']
+              as List<String>)
                   .map(
                     (technology) => Chip(
                   label: Text(
                     technology,
+
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+
                   backgroundColor:
-                  primaryColor.withOpacity(0.08),
+                  primaryColor.withValues(
+                    alpha: 0.08,
+                  ),
+
                   side: BorderSide.none,
+
                   visualDensity:
                   VisualDensity.compact,
-                  padding: const EdgeInsets.symmetric(
+
+                  padding:
+                  const EdgeInsets.symmetric(
                     horizontal: 4,
                   ),
                 ),
@@ -311,38 +458,6 @@ class _ProjectCardState extends State<_ProjectCard> {
                   .toList(),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ProjectIconButton extends StatelessWidget {
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onPressed;
-
-  const _ProjectIconButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Tooltip(
-      message: tooltip,
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(
-          icon,
-          size: 19,
-        ),
-        style: IconButton.styleFrom(
-          foregroundColor:
-          theme.colorScheme.onSurface.withOpacity(0.7),
         ),
       ),
     );
