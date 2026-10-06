@@ -1,3 +1,4 @@
+import 'package:ashish_portfolio/widgets/floating_card.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -201,15 +202,15 @@ class ProjectsSection extends StatelessWidget {
 
                   return GridView.builder(
                     shrinkWrap: true,
-                    physics:
-                    const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: projects.length,
-                    gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,
                       crossAxisSpacing: 22,
                       mainAxisSpacing: 22,
-                      childAspectRatio: 1.15,
+                      mainAxisExtent: constraints.maxWidth < 600
+                          ? 430
+                          : 380,
                     ),
                     itemBuilder: (context, index) {
                       return _ProjectCard(
@@ -258,53 +259,9 @@ class _ProjectCardState extends State<_ProjectCard> {
 
     final bool hasGithub = githubUrl.isNotEmpty;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.basic,
-      onEnter: (_) {
-        setState(() {
-          isHovered = true;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          isHovered = false;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOut,
-
-        transform: Matrix4.translationValues(
-          0,
-          isHovered ? -6 : 0,
-          0,
-        ),
-
-        padding: const EdgeInsets.all(24),
-
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(20),
-
-          border: Border.all(
-            color: isHovered
-                ? primaryColor.withValues(alpha: 0.45)
-                : primaryColor.withValues(alpha: 0.12),
-          ),
-
-          boxShadow: isHovered
-              ? [
-            BoxShadow(
-              blurRadius: 25,
-              spreadRadius: 1,
-              color: primaryColor.withValues(alpha: 0.12),
-              offset: const Offset(0, 8),
-            ),
-          ]
-              : [],
-        ),
-
-        child: Column(
+    return FloatingCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // --------------------------------------------------
@@ -459,7 +416,6 @@ class _ProjectCardState extends State<_ProjectCard> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

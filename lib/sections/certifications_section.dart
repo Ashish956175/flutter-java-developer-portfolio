@@ -1,3 +1,4 @@
+import 'package:ashish_portfolio/widgets/floating_card.dart';
 import 'package:flutter/material.dart';
 
 class CertificationsSection extends StatelessWidget {
@@ -80,19 +81,20 @@ class CertificationsSection extends StatelessWidget {
 
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final isMobile = constraints.maxWidth < 700;
+
 
                   return GridView.builder(
                     shrinkWrap: true,
                     physics:
                     const NeverScrollableScrollPhysics(),
                     itemCount: certifications.length,
-                    gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: isMobile ? 1 : 2,
-                      crossAxisSpacing: 22,
-                      mainAxisSpacing: 22,
-                      childAspectRatio: isMobile ? 1.35 : 1.45,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constraints.maxWidth < 700 ? 1 : 2,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      mainAxisExtent: constraints.maxWidth < 600
+                          ? 260
+                          : 230,
                     ),
                     itemBuilder: (context, index) {
                       return _CertificationCard(
@@ -134,46 +136,9 @@ class _CertificationCardState
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.basic,
-      onEnter: (_) {
-        setState(() {
-          isHovered = true;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          isHovered = false;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOut,
-        transform: Matrix4.translationValues(
-          0,
-          isHovered ? -5 : 0,
-          0,
-        ),
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isHovered
-                ? primary.withValues(alpha: 0.40)
-                : primary.withValues(alpha: 0.12),
-          ),
-          boxShadow: isHovered
-              ? [
-            BoxShadow(
-              color: primary.withValues(alpha: 0.10),
-              blurRadius: 22,
-              offset: const Offset(0, 8),
-            ),
-          ]
-              : [],
-        ),
-        child: Column(
+    return FloatingCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -272,7 +237,6 @@ class _CertificationCardState
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

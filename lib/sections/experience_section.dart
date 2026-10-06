@@ -1,3 +1,4 @@
+import 'package:ashish_portfolio/widgets/floating_card.dart';
 import 'package:flutter/material.dart';
 
 class ExperienceSection extends StatelessWidget {
@@ -63,53 +64,8 @@ class _ExperienceCardState extends State<_ExperienceCard> {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.basic,
-
-      onEnter: (_) {
-        setState(() {
-          isHovered = true;
-        });
-      },
-
-      onExit: (_) {
-        setState(() {
-          isHovered = false;
-        });
-      },
-
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-
-        transform: Matrix4.translationValues(
-          0,
-          isHovered ? -4 : 0,
-          0,
-        ),
-
+    return FloatingCard(
         padding: const EdgeInsets.all(28),
-
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(20),
-
-          border: Border.all(
-            color: isHovered
-                ? primaryColor.withValues(alpha: 0.4)
-                : primaryColor.withValues(alpha: 0.12),
-          ),
-
-          boxShadow: isHovered
-              ? [
-            BoxShadow(
-              blurRadius: 24,
-              spreadRadius: 1,
-              color: primaryColor.withValues(alpha: 0.10),
-            ),
-          ]
-              : [],
-        ),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -203,8 +159,7 @@ class _ExperienceCardState extends State<_ExperienceCard> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

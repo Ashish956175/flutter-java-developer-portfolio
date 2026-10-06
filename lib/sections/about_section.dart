@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/floating_card.dart';
+
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
@@ -63,7 +65,7 @@ class AboutSection extends StatelessWidget {
 
   Widget _introCard(BuildContext context) {
     return Card(
-      child: Padding(
+      child: FloatingCard(
         padding: const EdgeInsets.all(28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +116,7 @@ class AboutSection extends StatelessWidget {
 
   Widget _educationCard(BuildContext context) {
     return Card(
-      child: Padding(
+      child: FloatingCard(
         padding: const EdgeInsets.all(28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
