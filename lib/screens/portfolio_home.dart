@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../sections/about_section.dart';
 import '../sections/certifications_section.dart';
@@ -25,13 +26,17 @@ class PortfolioHome extends StatefulWidget {
 class _PortfolioHomeState extends State<PortfolioHome> {
   final ScrollController _scrollController = ScrollController();
 
+  // Section keys
   final GlobalKey homeKey = GlobalKey();
   final GlobalKey aboutKey = GlobalKey();
   final GlobalKey skillsKey = GlobalKey();
   final GlobalKey experienceKey = GlobalKey();
   final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey certificationsKey = GlobalKey();
+  final GlobalKey educationKey = GlobalKey();
   final GlobalKey contactKey = GlobalKey();
 
+  // Scroll to selected section
   void scrollToSection(GlobalKey key) {
     final context = key.currentContext;
 
@@ -54,6 +59,9 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(
+      // =====================================================
+      // MOBILE
+      // =====================================================
       mobile: _MobileHome(
         scrollController: _scrollController,
         homeKey: homeKey,
@@ -61,21 +69,33 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         skillsKey: skillsKey,
         experienceKey: experienceKey,
         projectsKey: projectsKey,
+        certificationsKey: certificationsKey,
+        educationKey: educationKey,
         contactKey: contactKey,
         scrollToSection: scrollToSection,
         onThemeChanged: widget.onThemeChanged,
       ),
-      tablet: _DesktopHome(
+
+      // =====================================================
+      // TABLET
+      // =====================================================
+      tablet: _MobileHome(
         scrollController: _scrollController,
         homeKey: homeKey,
         aboutKey: aboutKey,
         skillsKey: skillsKey,
         experienceKey: experienceKey,
         projectsKey: projectsKey,
+        certificationsKey: certificationsKey,
+        educationKey: educationKey,
         contactKey: contactKey,
         scrollToSection: scrollToSection,
         onThemeChanged: widget.onThemeChanged,
       ),
+
+      // =====================================================
+      // DESKTOP
+      // =====================================================
       desktop: _DesktopHome(
         scrollController: _scrollController,
         homeKey: homeKey,
@@ -83,6 +103,8 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         skillsKey: skillsKey,
         experienceKey: experienceKey,
         projectsKey: projectsKey,
+        certificationsKey: certificationsKey,
+        educationKey: educationKey,
         contactKey: contactKey,
         scrollToSection: scrollToSection,
         onThemeChanged: widget.onThemeChanged,
@@ -91,9 +113,9 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   }
 }
 
-// =====================================================
-// DESKTOP HOME
-// =====================================================
+// ==========================================================
+// DESKTOP / TABLET HOME
+// ==========================================================
 
 class _DesktopHome extends StatelessWidget {
   final ScrollController scrollController;
@@ -105,6 +127,8 @@ class _DesktopHome extends StatelessWidget {
   final GlobalKey skillsKey;
   final GlobalKey experienceKey;
   final GlobalKey projectsKey;
+  final GlobalKey certificationsKey;
+  final GlobalKey educationKey;
   final GlobalKey contactKey;
 
   final Function(GlobalKey) scrollToSection;
@@ -117,6 +141,8 @@ class _DesktopHome extends StatelessWidget {
     required this.skillsKey,
     required this.experienceKey,
     required this.projectsKey,
+    required this.certificationsKey,
+    required this.educationKey,
     required this.contactKey,
     required this.scrollToSection,
   });
@@ -129,6 +155,10 @@ class _DesktopHome extends StatelessWidget {
         controller: scrollController,
         child: Column(
           children: [
+            // =================================================
+            // NAVBAR
+            // =================================================
+
             _DesktopNavbar(
               onThemeChanged: onThemeChanged,
               scrollToSection: scrollToSection,
@@ -137,47 +167,82 @@ class _DesktopHome extends StatelessWidget {
               skillsKey: skillsKey,
               experienceKey: experienceKey,
               projectsKey: projectsKey,
+              certificationsKey: certificationsKey,
+              educationKey: educationKey,
               contactKey: contactKey,
             ),
-            // Hero
+
+            // =================================================
+            // HERO
+            // =================================================
+
             Container(
               key: homeKey,
               child: HeroSection(
-                onViewProjects: () => scrollToSection(projectsKey),
-              )
+                onViewProjects: () {
+                  scrollToSection(projectsKey);
+                },
+              ),
             ),
 
-            // About
+            // =================================================
+            // ABOUT
+            // =================================================
+
             Container(
               key: aboutKey,
               child: const AboutSection(),
             ),
 
-            // Skills
+            // =================================================
+            // SKILLS
+            // =================================================
+
             Container(
               key: skillsKey,
               child: const SkillsSection(),
             ),
 
-            // Experience
+            // =================================================
+            // EXPERIENCE
+            // =================================================
+
             Container(
               key: experienceKey,
               child: const ExperienceSection(),
             ),
 
-            // Projects
+            // =================================================
+            // PROJECTS
+            // =================================================
+
             Container(
               key: projectsKey,
               child: const ProjectsSection(),
             ),
 
-            // Certifications
-            const CertificationsSection(),
+            // =================================================
+            // CERTIFICATIONS
+            // =================================================
 
-            // Education
-            const EducationSection(),
+            Container(
+              key: certificationsKey,
+              child: const CertificationsSection(),
+            ),
 
-            // Contact
+            // =================================================
+            // EDUCATION
+            // =================================================
+
+            Container(
+              key: educationKey,
+              child: const EducationSection(),
+            ),
+
+            // =================================================
+            // CONTACT
+            // =================================================
+
             Container(
               key: contactKey,
               child: const ContactSection(),
@@ -189,9 +254,9 @@ class _DesktopHome extends StatelessWidget {
   }
 }
 
-// =====================================================
+// ==========================================================
 // MOBILE HOME
-// =====================================================
+// ==========================================================
 
 class _MobileHome extends StatelessWidget {
   final ScrollController scrollController;
@@ -203,6 +268,8 @@ class _MobileHome extends StatelessWidget {
   final GlobalKey skillsKey;
   final GlobalKey experienceKey;
   final GlobalKey projectsKey;
+  final GlobalKey certificationsKey;
+  final GlobalKey educationKey;
   final GlobalKey contactKey;
 
   final Function(GlobalKey) scrollToSection;
@@ -215,6 +282,8 @@ class _MobileHome extends StatelessWidget {
     required this.skillsKey,
     required this.experienceKey,
     required this.projectsKey,
+    required this.certificationsKey,
+    required this.educationKey,
     required this.contactKey,
     required this.scrollToSection,
   });
@@ -227,6 +296,10 @@ class _MobileHome extends StatelessWidget {
         controller: scrollController,
         child: Column(
           children: [
+            // =================================================
+            // MOBILE NAVBAR
+            // =================================================
+
             _MobileNavbar(
               onThemeChanged: onThemeChanged,
               scrollToSection: scrollToSection,
@@ -235,48 +308,82 @@ class _MobileHome extends StatelessWidget {
               skillsKey: skillsKey,
               experienceKey: experienceKey,
               projectsKey: projectsKey,
+              certificationsKey: certificationsKey,
+              educationKey: educationKey,
               contactKey: contactKey,
             ),
 
-            // Hero
+            // =================================================
+            // HERO
+            // =================================================
+
             Container(
               key: homeKey,
               child: HeroSection(
-                onViewProjects: () => scrollToSection(projectsKey),
+                onViewProjects: () {
+                  scrollToSection(projectsKey);
+                },
               ),
             ),
 
-            // About
+            // =================================================
+            // ABOUT
+            // =================================================
+
             Container(
               key: aboutKey,
               child: const AboutSection(),
             ),
 
-            // Skills
+            // =================================================
+            // SKILLS
+            // =================================================
+
             Container(
               key: skillsKey,
               child: const SkillsSection(),
             ),
 
-            // Experience
+            // =================================================
+            // EXPERIENCE
+            // =================================================
+
             Container(
               key: experienceKey,
               child: const ExperienceSection(),
             ),
 
-            // Projects
+            // =================================================
+            // PROJECTS
+            // =================================================
+
             Container(
               key: projectsKey,
               child: const ProjectsSection(),
             ),
 
-            // Certifications
-            const CertificationsSection(),
+            // =================================================
+            // CERTIFICATIONS
+            // =================================================
 
-            // Education
-            const EducationSection(),
+            Container(
+              key: certificationsKey,
+              child: const CertificationsSection(),
+            ),
 
-            // Contact
+            // =================================================
+            // EDUCATION
+            // =================================================
+
+            Container(
+              key: educationKey,
+              child: const EducationSection(),
+            ),
+
+            // =================================================
+            // CONTACT
+            // =================================================
+
             Container(
               key: contactKey,
               child: const ContactSection(),
@@ -288,9 +395,9 @@ class _MobileHome extends StatelessWidget {
   }
 }
 
-// =====================================================
+// ==========================================================
 // DESKTOP NAVBAR
-// =====================================================
+// ==========================================================
 
 class _DesktopNavbar extends StatelessWidget {
   final VoidCallback onThemeChanged;
@@ -300,6 +407,8 @@ class _DesktopNavbar extends StatelessWidget {
   final GlobalKey skillsKey;
   final GlobalKey experienceKey;
   final GlobalKey projectsKey;
+  final GlobalKey certificationsKey;
+  final GlobalKey educationKey;
   final GlobalKey contactKey;
 
   final Function(GlobalKey) scrollToSection;
@@ -311,6 +420,8 @@ class _DesktopNavbar extends StatelessWidget {
     required this.skillsKey,
     required this.experienceKey,
     required this.projectsKey,
+    required this.certificationsKey,
+    required this.educationKey,
     required this.contactKey,
     required this.scrollToSection,
   });
@@ -326,6 +437,10 @@ class _DesktopNavbar extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // =================================================
+          // LOGO
+          // =================================================
+
           Text(
             'ASHISH',
             style: TextStyle(
@@ -336,6 +451,10 @@ class _DesktopNavbar extends StatelessWidget {
           ),
 
           const Spacer(),
+
+          // =================================================
+          // NAV ITEMS
+          // =================================================
 
           _navItem(
             'Home',
@@ -353,19 +472,35 @@ class _DesktopNavbar extends StatelessWidget {
           ),
 
           _navItem(
+            'Experience',
+            experienceKey,
+          ),
+
+          _navItem(
             'Projects',
             projectsKey,
           ),
 
           _navItem(
-            'Experience',
-            experienceKey,
+            'Certifications',
+            certificationsKey,
+          ),
+
+          _navItem(
+            'Education',
+            educationKey,
           ),
 
           _navItem(
             'Contact',
             contactKey,
           ),
+
+          const SizedBox(width: 8),
+
+          // =================================================
+          // THEME BUTTON
+          // =================================================
 
           IconButton(
             tooltip: 'Change theme',
@@ -379,11 +514,17 @@ class _DesktopNavbar extends StatelessWidget {
 
           const SizedBox(width: 8),
 
-          ElevatedButton(
-            onPressed: () {
-              // Resume download will be added later.
-            },
-            child: const Text('Resume'),
+          // =================================================
+          // RESUME BUTTON
+          // =================================================
+
+          ElevatedButton.icon(
+            onPressed: _openResume,
+            icon: const Icon(
+              Icons.download_outlined,
+              size: 18,
+            ),
+            label: const Text('Resume'),
           ),
         ],
       ),
@@ -401,11 +542,24 @@ class _DesktopNavbar extends StatelessWidget {
       child: Text(title),
     );
   }
+
+  Future<void> _openResume() async {
+    final uri = Uri.base.resolve(
+      'resume/Ashish_Resume.pdf',
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
 }
 
-// =====================================================
+// ==========================================================
 // MOBILE NAVBAR
-// =====================================================
+// ==========================================================
 
 class _MobileNavbar extends StatelessWidget {
   final VoidCallback onThemeChanged;
@@ -415,6 +569,8 @@ class _MobileNavbar extends StatelessWidget {
   final GlobalKey skillsKey;
   final GlobalKey experienceKey;
   final GlobalKey projectsKey;
+  final GlobalKey certificationsKey;
+  final GlobalKey educationKey;
   final GlobalKey contactKey;
 
   final Function(GlobalKey) scrollToSection;
@@ -426,6 +582,8 @@ class _MobileNavbar extends StatelessWidget {
     required this.skillsKey,
     required this.experienceKey,
     required this.projectsKey,
+    required this.certificationsKey,
+    required this.educationKey,
     required this.contactKey,
     required this.scrollToSection,
   });
@@ -441,6 +599,10 @@ class _MobileNavbar extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // =================================================
+          // LOGO
+          // =================================================
+
           Text(
             'ASHISH',
             style: TextStyle(
@@ -452,6 +614,10 @@ class _MobileNavbar extends StatelessWidget {
 
           const Spacer(),
 
+          // =================================================
+          // THEME
+          // =================================================
+
           IconButton(
             tooltip: 'Change theme',
             onPressed: onThemeChanged,
@@ -461,6 +627,10 @@ class _MobileNavbar extends StatelessWidget {
                   : Icons.dark_mode,
             ),
           ),
+
+          // =================================================
+          // MENU
+          // =================================================
 
           IconButton(
             tooltip: 'Menu',
@@ -478,55 +648,126 @@ class _MobileNavbar extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
       builder: (context) {
         return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _menuItem(
-                  context,
-                  'Home',
-                  Icons.home_outlined,
-                  homeKey,
-                ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // =========================================
+                  // HOME
+                  // =========================================
 
-                _menuItem(
-                  context,
-                  'About',
-                  Icons.person_outline,
-                  aboutKey,
-                ),
+                  _menuItem(
+                    context,
+                    'Home',
+                    Icons.home_outlined,
+                    homeKey,
+                  ),
 
-                _menuItem(
-                  context,
-                  'Skills',
-                  Icons.code_outlined,
-                  skillsKey,
-                ),
+                  // =========================================
+                  // ABOUT
+                  // =========================================
 
-                _menuItem(
-                  context,
-                  'Experience',
-                  Icons.work_outline,
-                  experienceKey,
-                ),
+                  _menuItem(
+                    context,
+                    'About',
+                    Icons.person_outline,
+                    aboutKey,
+                  ),
 
-                _menuItem(
-                  context,
-                  'Projects',
-                  Icons.folder_outlined,
-                  projectsKey,
-                ),
+                  // =========================================
+                  // SKILLS
+                  // =========================================
 
-                _menuItem(
-                  context,
-                  'Contact',
-                  Icons.email_outlined,
-                  contactKey,
-                ),
-              ],
+                  _menuItem(
+                    context,
+                    'Skills',
+                    Icons.code_outlined,
+                    skillsKey,
+                  ),
+
+                  // =========================================
+                  // EXPERIENCE
+                  // =========================================
+
+                  _menuItem(
+                    context,
+                    'Experience',
+                    Icons.work_outline,
+                    experienceKey,
+                  ),
+
+                  // =========================================
+                  // PROJECTS
+                  // =========================================
+
+                  _menuItem(
+                    context,
+                    'Projects',
+                    Icons.folder_outlined,
+                    projectsKey,
+                  ),
+
+                  // =========================================
+                  // CERTIFICATIONS
+                  // =========================================
+
+                  _menuItem(
+                    context,
+                    'Certifications',
+                    Icons.verified_outlined,
+                    certificationsKey,
+                  ),
+
+                  // =========================================
+                  // EDUCATION
+                  // =========================================
+
+                  _menuItem(
+                    context,
+                    'Education',
+                    Icons.school_outlined,
+                    educationKey,
+                  ),
+
+                  // =========================================
+                  // CONTACT
+                  // =========================================
+
+                  _menuItem(
+                    context,
+                    'Contact',
+                    Icons.email_outlined,
+                    contactKey,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // =========================================
+                  // RESUME
+                  // =========================================
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _openResume();
+                      },
+                      icon: const Icon(
+                        Icons.download_outlined,
+                      ),
+                      label: const Text(
+                        'Download Resume',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -543,6 +784,9 @@ class _MobileNavbar extends StatelessWidget {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       onTap: () {
         Navigator.pop(context);
 
@@ -554,5 +798,18 @@ class _MobileNavbar extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _openResume() async {
+    final uri = Uri.base.resolve(
+      'resume/Ashish_Resume.pdf',
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    }
   }
 }
