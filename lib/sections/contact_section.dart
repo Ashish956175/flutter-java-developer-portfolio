@@ -1,33 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../utils/link_launcher.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
-
-  Future<void> _openUrl(String url) async {
-    final uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
-    }
-  }
-
-  Future<void> _sendEmail() async {
-    final uri = Uri(
-      scheme: 'mailto',
-      path: 'ashishgaikwad9561@gmail.com',
-      queryParameters: {
-        'subject': 'Software Development Opportunity',
-      },
-    );
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +81,13 @@ class ContactSection extends StatelessWidget {
                           _ContactIntro(),
                           const SizedBox(height: 30),
                           _ContactItems(
-                            onEmail: _sendEmail,
-                            onGitHub: () => _openUrl(
-                              'https://github.com/Ashish956175',
-                            ),
-                            onLinkedIn: () => _openUrl(
-                              'https://linkedin.com/in/ashish9561/',
-                            ),
+                            onEmail: (){LinkLauncher.sendEmail(context);},
+                            onGitHub: (){
+                              LinkLauncher.openUrl(context, 'https://github.com/Ashish956175');
+                            },
+                            onLinkedIn: (){
+                              LinkLauncher.openUrl(context, 'https://linkedin.com/in/ashish9561');
+                            }
                           ),
                         ],
                       );
@@ -129,13 +104,13 @@ class ContactSection extends StatelessWidget {
                         Expanded(
                           flex: 6,
                           child: _ContactItems(
-                            onEmail: _sendEmail,
-                            onGitHub: () => _openUrl(
-                              'https://github.com/Ashish956175',
-                            ),
-                            onLinkedIn: () => _openUrl(
-                              'https://linkedin.com/in/ashish9561/',
-                            ),
+                            onEmail: (){LinkLauncher.sendEmail(context);},
+                            onGitHub: (){
+                              LinkLauncher.openUrl(context, 'https://github.com/Ashish956175');
+                            },
+                            onLinkedIn: (){
+                              LinkLauncher.openUrl(context, 'https://linkedin.com/in/ashish9561');
+                            }
                           ),
                         ),
                       ],

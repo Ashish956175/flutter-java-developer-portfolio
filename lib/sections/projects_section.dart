@@ -1,20 +1,9 @@
+import 'package:ashish_portfolio/utils/link_launcher.dart';
 import 'package:ashish_portfolio/widgets/floating_card.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
-
-  Future<void> _openUrl(String url) async {
-    final uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,20 +191,22 @@ class ProjectsSection extends StatelessWidget {
 
                   return GridView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics:
+                    const NeverScrollableScrollPhysics(),
                     itemCount: projects.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,
                       crossAxisSpacing: 22,
                       mainAxisSpacing: 22,
-                      mainAxisExtent: constraints.maxWidth < 600
+                      mainAxisExtent:
+                      constraints.maxWidth < 600
                           ? 430
                           : 380,
                     ),
                     itemBuilder: (context, index) {
                       return _ProjectCard(
                         project: projects[index],
-                        onOpenUrl: _openUrl,
                       );
                     },
                   );
@@ -233,21 +224,12 @@ class ProjectsSection extends StatelessWidget {
 // PROJECT CARD
 // ==========================================================
 
-class _ProjectCard extends StatefulWidget {
+class _ProjectCard extends StatelessWidget {
   final Map<String, dynamic> project;
-  final Future<void> Function(String url) onOpenUrl;
 
   const _ProjectCard({
     required this.project,
-    required this.onOpenUrl,
   });
-
-  @override
-  State<_ProjectCard> createState() => _ProjectCardState();
-}
-
-class _ProjectCardState extends State<_ProjectCard> {
-  bool isHovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -255,167 +237,165 @@ class _ProjectCardState extends State<_ProjectCard> {
     final primaryColor = theme.colorScheme.primary;
 
     final String githubUrl =
-        widget.project['github'] as String? ?? '';
+        project['github'] as String? ?? '';
 
     final bool hasGithub = githubUrl.isNotEmpty;
 
     return FloatingCard(
       padding: const EdgeInsets.all(20),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // --------------------------------------------------
-            // ICON + GITHUB BUTTON
-            // --------------------------------------------------
-            Row(
-              children: [
-                Container(
-                  height: 52,
-                  width: 52,
-
-                  decoration: BoxDecoration(
-                    color: primaryColor.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(14),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // --------------------------------------------------
+          // ICON + GITHUB BUTTON
+          // --------------------------------------------------
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 52,
+                width: 52,
+                decoration: BoxDecoration(
+                  color: primaryColor.withValues(
+                    alpha: 0.10,
                   ),
-
-                  child: Icon(
-                    widget.project['icon'] as IconData,
-                    color: primaryColor,
-                    size: 27,
-                  ),
+                  borderRadius:
+                  BorderRadius.circular(14),
                 ),
-
-                const Spacer(),
-
-                if (hasGithub)
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      widget.onOpenUrl(githubUrl);
-                    },
-
-                    icon: const Icon(
-                      Icons.code_rounded,
-                      size: 18,
-                    ),
-
-                    label: const Text(
-                      'GitHub',
-                    ),
-
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: primaryColor,
-
-                      side: BorderSide(
-                        color: primaryColor.withValues(
-                          alpha: 0.25,
-                        ),
-                      ),
-
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // --------------------------------------------------
-            // CATEGORY
-            // --------------------------------------------------
-            Text(
-              widget.project['category'] as String,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.8,
-                color: primaryColor,
-              ),
-            ),
-
-            const SizedBox(height: 6),
-
-            // --------------------------------------------------
-            // PROJECT TITLE
-            // --------------------------------------------------
-            Text(
-              widget.project['title'] as String,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                height: 1.3,
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // --------------------------------------------------
-            // DESCRIPTION
-            // --------------------------------------------------
-            Expanded(
-              child: Text(
-                widget.project['description'] as String,
-
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  height: 1.55,
-                  color: theme.colorScheme.onSurface.withValues(
-                    alpha: 0.72,
-                  ),
+                child: Icon(
+                  project['icon'] as IconData,
+                  color: primaryColor,
+                  size: 27,
                 ),
               ),
-            ),
 
-            const SizedBox(height: 16),
+              const Spacer(),
 
-            // --------------------------------------------------
-            // TECHNOLOGIES
-            // --------------------------------------------------
-            Wrap(
-              spacing: 7,
-              runSpacing: 7,
-
-              children:
-              (widget.project['technologies']
-              as List<String>)
-                  .map(
-                    (technology) => Chip(
-                  label: Text(
-                    technology,
-
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
+              if (hasGithub)
+                OutlinedButton.icon(
+                  onPressed: () {
+                    LinkLauncher.openUrl(
+                      context,
+                      githubUrl,
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.code_rounded,
+                    size: 18,
+                  ),
+                  label: const Text(
+                    'GitHub',
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: primaryColor,
+                    side: BorderSide(
+                      color: primaryColor.withValues(
+                        alpha: 0.25,
+                      ),
+                    ),
+                    shape:
+                    RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.circular(10),
+                    ),
+                    padding:
+                    const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
                     ),
                   ),
+                ),
+            ],
+          ),
 
-                  backgroundColor:
-                  primaryColor.withValues(
-                    alpha: 0.08,
-                  ),
+          const SizedBox(height: 20),
 
-                  side: BorderSide.none,
+          // --------------------------------------------------
+          // CATEGORY
+          // --------------------------------------------------
+          Text(
+            project['category'] as String,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.8,
+              color: primaryColor,
+            ),
+          ),
 
-                  visualDensity:
-                  VisualDensity.compact,
+          const SizedBox(height: 6),
 
-                  padding:
-                  const EdgeInsets.symmetric(
-                    horizontal: 4,
+          // --------------------------------------------------
+          // PROJECT TITLE
+          // --------------------------------------------------
+          Text(
+            project['title'] as String,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              height: 1.3,
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // --------------------------------------------------
+          // DESCRIPTION
+          // --------------------------------------------------
+          Expanded(
+            child: Text(
+              project['description'] as String,
+              style:
+              theme.textTheme.bodyMedium?.copyWith(
+                height: 1.55,
+                color:
+                theme.colorScheme.onSurface
+                    .withValues(
+                  alpha: 0.72,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // --------------------------------------------------
+          // TECHNOLOGIES
+          // --------------------------------------------------
+          Wrap(
+            spacing: 7,
+            runSpacing: 7,
+            children:
+            (project['technologies']
+            as List<String>)
+                .map(
+                  (technology) => Chip(
+                label: Text(
+                  technology,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight:
+                    FontWeight.w500,
                   ),
                 ),
-              )
-                  .toList(),
-            ),
-          ],
-        ),
-      );
+                backgroundColor:
+                primaryColor.withValues(
+                  alpha: 0.08,
+                ),
+                side: BorderSide.none,
+                visualDensity:
+                VisualDensity.compact,
+                padding:
+                const EdgeInsets.symmetric(
+                  horizontal: 4,
+                ),
+              ),
+            )
+                .toList(),
+          ),
+        ],
+      ),
+    );
   }
 }

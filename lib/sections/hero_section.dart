@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/hero_ambient_background.dart';
+import '../utils/link_launcher.dart';
 
 class HeroSection extends StatefulWidget {
   final VoidCallback onViewProjects;
@@ -47,39 +48,6 @@ class _HeroSectionState extends State<HeroSection>
     _clickTimer?.cancel();
     _profileController.dispose();
     super.dispose();
-  }
-
-  // ------------------------------------------------------------
-  // URL
-  // ------------------------------------------------------------
-
-  Future<void> _openUrl(String url) async {
-    final uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
-    }
-  }
-
-  // ------------------------------------------------------------
-  // EMAIL
-  // ------------------------------------------------------------
-
-  Future<void> _sendEmail() async {
-    final uri = Uri(
-      scheme: 'mailto',
-      path: 'ashishgaikwad9561@gmail.com',
-      queryParameters: {
-        'subject': 'Software Development Opportunity',
-      },
-    );
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
   }
 
   // ------------------------------------------------------------
@@ -357,23 +325,31 @@ class _HeroSectionState extends State<HeroSection>
               context,
               Icons.code_rounded,
               'GitHub',
-                  () => _openUrl(
-                'https://github.com/Ashish956175',
-              ),
+                    (){
+                      LinkLauncher.openUrl(
+                        context,
+                        'https://github.com/Ashish956175'
+                      );
+                    }
             ),
             _socialButton(
               context,
               Icons.business_center_outlined,
               'LinkedIn',
-                  () => _openUrl(
-                'https://linkedin.com/in/ashish9561/',
-              ),
+                  (){
+                      LinkLauncher.openUrl(
+                        context,
+                        'https://linkedin.com/in/ashish9561'
+                      );
+                    }
             ),
             _socialButton(
               context,
               Icons.email_outlined,
               'Email',
-              _sendEmail,
+                (){
+                LinkLauncher.sendEmail(context);
+                }
             ),
           ],
         ),
