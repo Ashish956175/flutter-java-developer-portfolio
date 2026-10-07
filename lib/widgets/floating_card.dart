@@ -25,24 +25,11 @@ class FloatingCard extends StatefulWidget {
   State<FloatingCard> createState() => _FloatingCardState();
 }
 
-class _FloatingCardState extends State<FloatingCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
+class _FloatingCardState extends State<FloatingCard> {
   double _rotationX = 0;
   double _rotationY = 0;
 
   bool _isHovered = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 180),
-    );
-  }
 
   void _handleHover(PointerHoverEvent event) {
     if (!widget.enableTilt) return;
@@ -85,21 +72,11 @@ class _FloatingCardState extends State<FloatingCard>
   }
 
   void _handleExit(PointerExitEvent event) {
-    _controller.forward(from: 0).then((_) {
-      if (!mounted) return;
-
-      setState(() {
-        _rotationX = 0;
-        _rotationY = 0;
-        _isHovered = false;
-      });
+    setState(() {
+      _rotationX = 0;
+      _rotationY = 0;
+      _isHovered = false;
     });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -166,6 +143,9 @@ class _FloatingCardState extends State<FloatingCard>
     ];
 
     return MouseRegion(
+      // Keep the hover target fixed to the card's layout bounds. The visual
+      // transform below must not move the pointer hit test with the card.
+      opaque: true,
       cursor: widget.onTap != null
           ? SystemMouseCursors.click
           : SystemMouseCursors.basic,
@@ -180,10 +160,9 @@ class _FloatingCardState extends State<FloatingCard>
           : null,
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
-          transformAlignment: Alignment.center,
+        child: Transform(
+          alignment: Alignment.center,
+          transformHitTests: false,
           transform: Matrix4.identity()
             ..setEntry(3, 2, 0.0012)
             ..rotateX(_rotationX)
@@ -194,7 +173,9 @@ class _FloatingCardState extends State<FloatingCard>
               0.0,
               1.0,
             ),
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
             width: double.infinity,
             padding: widget.padding,
             decoration: BoxDecoration(

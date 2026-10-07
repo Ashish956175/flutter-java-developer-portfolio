@@ -201,6 +201,7 @@ class _EducationCardState extends State<_EducationCard> {
     final primary = theme.colorScheme.primary;
 
     return MouseRegion(
+      opaque: true,
       cursor: SystemMouseCursors.basic,
       onEnter: (_) {
         setState(() {
@@ -443,6 +444,7 @@ class _AcademicCardState extends State<_AcademicCard> {
     final primary = theme.colorScheme.primary;
 
     return MouseRegion(
+      opaque: true,
       cursor: SystemMouseCursors.basic,
       onEnter: (_) {
         setState(() {
