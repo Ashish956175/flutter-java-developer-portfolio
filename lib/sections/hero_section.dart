@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math' as math;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../widgets/hanging_id_card.dart';
 import '../widgets/hero_ambient_background.dart';
 import '../utils/link_launcher.dart';
 
@@ -393,15 +393,23 @@ class _HeroSectionState extends State<HeroSection>
   // ANIMATED PROFILE
   // ------------------------------------------------------------
 
+  // ------------------------------------------------------------
+// RESPONSIVE PROFILE VISUAL
+// ------------------------------------------------------------
+
   Widget _profileVisual(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    // Browser / Web
+    if (kIsWeb) {
+      return const HangingIdCard();
+    }
+
+    // Mobile / Android / iOS
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
 
-    final width = MediaQuery.of(context).size.width;
-
-    final size = width < 600
-        ? 250.0
-        : 340.0;
+    final size = width < 600 ? 250.0 : 340.0;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -414,30 +422,17 @@ class _HeroSectionState extends State<HeroSection>
           builder: (context, child) {
             final progress = _profileController.value;
 
-            // ----------------------------------------------------
-            // CLICK PULSE
-            // ----------------------------------------------------
-
             final pulse = math.sin(
               progress * math.pi,
             );
 
-            final clickScale =
-                1.0 + (pulse * 0.045);
-
-            // ----------------------------------------------------
-            // CLICK ROTATION
-            // ----------------------------------------------------
+            final clickScale = 1.0 + (pulse * 0.045);
 
             final clickRotation =
                 math.sin(
                   progress * math.pi * 2,
                 ) *
                     0.025;
-
-            // ----------------------------------------------------
-            // MOUSE TILT
-            // ----------------------------------------------------
 
             double mouseTiltX = 0;
             double mouseTiltY = 0;
@@ -456,8 +451,11 @@ class _HeroSectionState extends State<HeroSection>
                   (_mousePosition.dy - center.dy) /
                       center.dy;
 
-              mouseTiltY = dx.clamp(-1.0, 1.0) * 0.07;
-              mouseTiltX = -dy.clamp(-1.0, 1.0) * 0.07;
+              mouseTiltY =
+                  dx.clamp(-1.0, 1.0) * 0.07;
+
+              mouseTiltX =
+                  -dy.clamp(-1.0, 1.0) * 0.07;
             }
 
             return TweenAnimationBuilder<double>(
@@ -482,15 +480,9 @@ class _HeroSectionState extends State<HeroSection>
                       2,
                       0.0015,
                     )
-                    ..rotateX(
-                      mouseTiltX,
-                    )
-                    ..rotateY(
-                      mouseTiltY,
-                    )
-                    ..rotateZ(
-                      clickRotation,
-                    )
+                    ..rotateX(mouseTiltX)
+                    ..rotateY(mouseTiltY)
+                    ..rotateZ(clickRotation)
                     ..translateByDouble(
                       0.0,
                       _isHoveringProfile ? -5.0 : 0.0,
