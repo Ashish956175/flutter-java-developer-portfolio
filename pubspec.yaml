@@ -47,6 +47,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.4.7
 flutter_launcher_icons:
   android: true
   ios: true
@@ -98,3 +99,15 @@ flutter:
   assets:
     - assets/resume/Ashish_Resume.pdf
     - assets/images/profile_image.png
+
+flutter_native_splash:
+  color: "#050A12"
+  color_dark: "#050A12"
+
+  android: true
+  ios: true
+  web: false
+
+  android_12:
+    color: "#050A12"
+    color_dark: "#050A12"

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'core/theme/app_theme.dart';
 import 'screens/portfolio_home.dart';
+import 'screens/splash_screen.dart';
 
 class PortfolioApp extends StatefulWidget {
   const PortfolioApp({super.key});
@@ -30,8 +32,10 @@ class _PortfolioAppState extends State<PortfolioApp> {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
 
-      home: PortfolioHome(
-        onThemeChanged: toggleTheme,
+      home: SplashScreen(
+        nextScreen: PortfolioHome(
+          onThemeChanged: toggleTheme,
+        ),
       ),
     );
   }
