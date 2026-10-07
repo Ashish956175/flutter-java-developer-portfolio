@@ -57,7 +57,7 @@ With hands-on experience as an **Associate Software Engineer at ThynkTech India 
 
 ## 📸 Portfolio Preview & Screenshots
 
-Here is a visual tour of the responsive Flutter Portfolio across **Desktop** and **Mobile** viewports.
+Here is a visual tour of the responsive Flutter Portfolio across **Desktop** and **Mobile** viewports, featuring the newly added **Animated Splash / Flash Screen**.
 
 ### 🖥️ Desktop / Web Experience
 
@@ -73,11 +73,11 @@ Here is a visual tour of the responsive Flutter Portfolio across **Desktop** and
 
 ---
 
-### 📱 Mobile Responsive Experience
+### 📱 Mobile Responsive Experience & Splash Screen
 
-| Mobile Hero & Intro | Mobile Experience | Mobile Projects & Skills | Mobile Contact & Connect |
-| :---: | :---: | :---: | :---: |
-| ![Mobile Hero](docs/mobile_screens/Screenshot_20261006_185903.png) | ![Mobile Experience](docs/mobile_screens/Screenshot_20261006_185917.png) | ![Mobile Projects](docs/mobile_screens/Screenshot_20261006_185931.png) | ![Mobile Contact](docs/mobile_screens/Screenshot_20261006_190050.png) |
+| Splash / Flash Screen | Mobile Hero & Intro | Mobile Experience | Mobile Projects & Skills | Mobile Contact & Connect |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Splash Screen](docs/mobile_screens/flash_screen.jpeg) | ![Mobile Hero](docs/mobile_screens/Screenshot_20261006_185903.png) | ![Mobile Experience](docs/mobile_screens/Screenshot_20261006_185917.png) | ![Mobile Projects](docs/mobile_screens/Screenshot_20261006_185931.png) | ![Mobile Contact](docs/mobile_screens/Screenshot_20261006_190050.png) |
 
 ---
 
@@ -192,7 +192,9 @@ flutter-java-developer-portfolio/
 ├── lib/
 │   ├── core/                 # App configuration & themes
 │   ├── models/               # Data structures & models
-│   ├── screens/              # Main portfolio home screen
+│   ├── screens/              # Portfolio views & animated splash screen
+│   │   ├── portfolio_home.dart
+│   │   └── splash_screen.dart
 │   ├── sections/             # Modular section components
 │   │   ├── hero_section.dart
 │   │   ├── about_section.dart
@@ -202,6 +204,8 @@ flutter-java-developer-portfolio/
 │   │   ├── certifications_section.dart
 │   │   ├── education_section.dart
 │   │   └── contact_section.dart
+│   ├── utils/                # Cross-platform URL & email launcher helpers
+│   │   └── link_launcher.dart
 │   └── widgets/              # Reusable UI widgets & animations
 ├── pubspec.yaml              # Flutter dependencies & assets metadata
 └── README.md                 # Professional portfolio README
