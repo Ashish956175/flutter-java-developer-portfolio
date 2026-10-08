@@ -78,7 +78,8 @@ Here is a visual tour of the responsive Flutter Portfolio across **Desktop** and
 
 | Section | Preview Screenshot |
 | :--- | :--- |
-| **Hero & Welcome Section**<br>*(Interactive design, gradient titles, quick CTA buttons)* | ![Desktop Hero](docs/browser_screens/Screenshot%202026-10-06%20184227.png) |
+| **Hero & Welcome (Dark Mode)**<br>*(Interactive developer identity card & quick CTA buttons)* | ![Desktop Hero Dark](docs/browser_screens/Screenshot%202026-10-06%20184227.png) |
+| **Hero & Welcome (Light Mode)**<br>*(Clean light theme with responsive Developer ID card)* | ![Desktop Hero Light](docs/browser_screens/Screenshot%202026-10-07%20170005.png) |
 | **About Me & Journey**<br>*(Engineering background, vision, and core philosophy)* | ![Desktop About](docs/browser_screens/Screenshot%202026-10-06%20184246.png) |
 | **Work Experience Card**<br>*(Associate Software Engineer @ ThynkTech India)* | ![Desktop Experience](docs/browser_screens/Screenshot%202026-10-06%20184303.png) |
 | **Featured Projects Grid**<br>*(Full-stack healthcare, booking systems, & native apps)* | ![Desktop Projects](docs/browser_screens/Screenshot%202026-10-06%20184318.png) |
