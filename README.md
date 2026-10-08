@@ -29,6 +29,9 @@
   <br /><br />
 
   <!-- QUICK ACTION BUTTONS -->
+  <a href="https://dddq8obusht4f.cloudfront.net">
+    <img src="https://img.shields.io/badge/🌐_Live_Demo-Visit_Portfolio-00C853?style=for-the-badge" alt="Live Demo" />
+  </a>
   <a href="mailto:ashishgaikwad9561@gmail.com?subject=Software%20Developer%20Hiring%20Opportunity">
     <img src="https://img.shields.io/badge/💼_Hire_Ashish-Fast_Response-007ACC?style=for-the-badge" alt="Hire Ashish" />
   </a>
@@ -37,6 +40,18 @@
   </a>
 
 </div>
+
+---
+
+## 🌐 Live Demo
+
+🚀 **Live Portfolio:** https://dddq8obusht4f.cloudfront.net
+
+Deployed using:
+- Flutter Web
+- Amazon S3
+- Amazon CloudFront
+- HTTPS
 
 ---
 
